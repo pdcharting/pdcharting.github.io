@@ -1,3 +1,5 @@
+> A simple guide to help you make better charts.
+
 > [!NOTE]
 > **Programs needed:**  
 > - [Comfy Studio](https://discord.com/channels/531630856767406105/531640485459132416/921740942061486130&follow=true) (Only available on [Project DIVA 2nd Modding Discord Server](https://discord.gg/projectdiva&follow=true))  
