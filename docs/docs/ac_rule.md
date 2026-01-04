@@ -1,4 +1,6 @@
-> A simple guide to help you make better charts.
+> Author: Ryan   
+> Date: 2025-07-17T14:18:01.000Z   
+> Source: https://gamebanana.com/tuts/18566     
 
 > [!NOTE]
 > **Programs needed:**  
