@@ -1,7 +1,7 @@
 /*!
- * Docsify Plugin: emoji v5.0.0-rc.3
+ * Docsify Plugin: emoji v5.0.0-rc.4
  * https://docsify.js.org
- * (c) 2017-2025
+ * (c) 2017-2026
  * MIT license
  */
 (function() {
@@ -1945,20 +1945,6 @@
             zombie_man: "unicode/1f9df-2642.png?v8",
             zombie_woman: "unicode/1f9df-2640.png?v8",
             zzz: "unicode/1f4a4.png?v8"
-        },
-        data_diva: {
-            ac_t: "diva_icon/FT-BUTTON-SANKAKU.png",
-            ac_s: "diva_icon/FT-BUTTON-SHIKAKU.png",
-            ac_x: "diva_icon/FT-BUTTON-BATSU.png",
-            ac_o: "diva_icon/FT-BUTTON-MARU.png",
-            ac_l: "diva_icon/BUTTON-SLIDE20-L.png",
-            ac_r: "diva_icon/BUTTON-SLIDE20-R.png",
-            cs_u: "diva_icon/PS-BUTTON-UP.png",
-            cs_l: "diva_icon/PS-BUTTON-LEFT.png",
-            cs_d: "diva_icon/PS-BUTTON-DOWN.png",
-            cs_r: "diva_icon/PS-BUTTON-RIGHT.png",
-            cs_s: "diva_icon/N-BUTTON-TOUCH.png",
-            cs_sw: "diva_icon/N-BUTTON-TOUCH-W.png"
         }
     };
     const window = globalThis;

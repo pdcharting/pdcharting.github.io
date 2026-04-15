@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
     <!-- Core Theme -->
-    <link rel="stylesheet" href="docsify/themes/core.min.css">
+    <link 
+      rel="stylesheet" 
+      href="docsify/themes/core.min.css"
+    />
   </head>
   <body class="loading">
     <div id="app"></div>
@@ -19,7 +22,13 @@
         autoHeader: true,
         subMaxLevel: 2,
         basePath: '/md_doc/',
-        //...
+        footer: {
+          copy: 'Copyright &copy; 2026  </span>',
+          auth: 'by hiki8man',
+          pre: '<hr/>',
+          style: 'text-align: left;',
+        },
+ 
       };
     </script>
 
@@ -27,7 +36,11 @@
     <script src="docsify/docsify.min.js"></script>
 
     <!-- Plugins (optional) -->
+     <script src="docsify/plugins/front-matter.min.js"></script>
      <script src="docsify/plugins/zoom-image.min.js"></script>
+     <script src="docsify/plugins/diva-emoji.js"></script>
+     <script src="docsify/plugins/docsify-footer-enh.min.js"></script>
     <!-- <script src="//cdn.jsdelivr.net/npm/docsify@5/dist/plugins/search.min.js"></script> -->
   </body>
+
 </html>
