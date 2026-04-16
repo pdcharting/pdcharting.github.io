@@ -12,21 +12,21 @@ This tutorial does not go over syncing as most of it is a case-by-case scenario.
 ## 1. Note Frequencies
 
 Each Project DIVA Note has a set of attributes to change it's behavior in-game.  
-Most of them are very straight forward and don't require much explaining. However, **<font color=green>`Frequency`</font>** is the one you need to learn first if you are aiming to give a more polished appearance to your charts.   
+Most of them are very straight forward and don't require much explaining. However, **<font color=MediumSeaGreen>`Frequency`</font>** is the one you need to learn first if you are aiming to give a more polished appearance to your charts.   
 SEGA has a very specific way of using this attribute since the Arcade Future Tone era of their charting and it's important you get familiar with this, but first, what even is this attribute?
 
 Just like a sound wave, notes in DIVA follow an almost wave-like motion when travelling to their target. Altering this attribute will change the way notes will fly in.   
-***Ex: Increasing the default value from <font color=green>2/-2</font> to <font color=red>3/4/5</font> will increase the <font color=green>Frequency</font> of the waves until they reach the Target.***
+***Ex: Increasing the default value from <font color=MediumSeaGreen>2/-2</font> to <font color=red>3/4/5</font> will increase the <font color=MediumSeaGreen>Frequency</font> of the waves until they reach the Target.***
 
-You will be learning when to use a <font color=green>Positive Frequency (2)</font> or a <font color=green>negative one (-2)</font>   
+You will be learning when to use a <font color=MediumSeaGreen>Positive Frequency (2)</font> or a <font color=MediumSeaGreen>negative one (-2)</font>   
 Increasing or decreasing this value is <font color=red>not recommended</font> if you plan on making SEGA-like charts, as their use in official charts is very scarce. 
 
 Hold the <kbd>Right mouse button</kbd> on the timeline, similar to how you would use the rectangular selection tool in Windows and drag it over the notes to select them. Once the notes are selected, click anywhere with a left click on the Target Preview Window and press <kbd>2</kbd> on your keyboard to enter Angle Mode. You can rapidly switch Frequencies by pressing <kbd>R</kbd>.  
 ![](/assets/ac_rule_001.gif)  
-### 1.1 Note Frequencies <font color=green>Top (↑)</font>  
+### 1.1 Note Frequencies <font color=MediumSeaGreen>Top (↑)</font>  
 When going Left to Right, the Frequencies should be as shown in these example images.  
 ![](/assets/ac_rule_002.png)  
-### 1.1 Note Frequencies <font color=green>Top (↑)</font>   
+### 1.1 Note Frequencies <font color=MediumSeaGreen>Top (↑)</font>   
 When going Right to Left, the Frequencies should be as shown in these example images.   
 ![](/assets/ac_rule_003.png)  
 ### 1.2 Note Frequencies <font color=red>Bottom (↓)</font>   
@@ -79,7 +79,7 @@ While making a beatmap, it's very important you keep the hand movement of the pl
 Below you can find an image regarding the Arcade Order.   
 ![](/assets/ac_rule_018.png)   
 I know that image must be a bit confusing to take in but just think of the hand movement whilst playing on an Arcade Controller. When you have a sequence going from left to right you want the player to hit notes comfortably.    
-From left to right it goes: <font color=green>Triangle</font> then <font color=green>Square</font> then <font color=green>Cross</font> then <font color=green>Circle</font>   
+From left to right it goes: <font color=MediumSeaGreen>Triangle</font> then <font color=MediumSeaGreen>Square</font> then <font color=MediumSeaGreen>Cross</font> then <font color=MediumSeaGreen>Circle</font>   
 From right to left it goes: <font color=red>Circle</font> then <font color=red>Cross</font> then <font color=red>Square</font> then <font color=red>Triangle</font>
 
 As an example of this being used, when ur making a sequence that alternates between Square and Cross: Depending on which direction it's going to, the note types will have to swap.   
