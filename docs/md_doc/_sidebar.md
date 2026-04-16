@@ -1,5 +1,3 @@
 - Charting
     - [Charting Guide (General Rules)](ac_rule.md 'A simple guide to help you make better charts. ')
     - [AC Score System](score_system.md)
-- 语法
-    - [ui-kit](ui-kit.md)
