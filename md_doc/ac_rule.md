@@ -106,7 +106,7 @@ This can be bypassed depending on the complexity of the sequence at hand but do 
 
 When you have multiple Multi notes in a sequence, think of every square in the grid as a different note type, you have to make them line up, remember, at base they're still all a quad note split into different variations. 
 
-In this example image, you can see the Triangles from the multis are all lined up, think of the 2nd line as the line for the Square in multis, since it isn't used after the first multi, there's a gap for the rest of it, and so on and so on.
+In this example image, you can see the :ac_t: from the multis are all lined up, think of the 2nd line as the line for the :ac_s: in multis, since it isn't used after the first multi, there's a gap for the rest of it, and so on and so on.
 ![](/assets/ac_rule_025.png)   
 In the second image I made it a bit more complicated but it has the same system in mind.   
 ![](/assets/ac_rule_026.png)
