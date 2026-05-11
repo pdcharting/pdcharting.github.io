@@ -22,4 +22,4 @@ If you’ve never charted before, it’s highly recommended that you look over t
 [ac_rule]:/ac_rule
 
 <!-- Image -->
-[comfy_help]:empty
+[comfy_help]:https://i.imgur.com/f9qjgMW.png

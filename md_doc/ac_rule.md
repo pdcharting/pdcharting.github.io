@@ -52,15 +52,15 @@ By looking at the Placement Grid you are able to spot Four + Signs, these are ma
 For simplicity I have placed each note type above it’s corresponding Marker.   
 ![](/assets/ac_rule_010.png)     
 *What does this all mean?*   
-It means when placing down a <font color=red>Triangle + Square</font> Multi Note horizontally, it will be placed on the First 2 Markers (starting from the Left).
+It means when placing down a <kbd><font color=red>:ac_t:+:ac_s:</font></kbd> Multi Note horizontally, it will be placed on the First 2 Markers (starting from the Left).
 ![](/assets/ac_rule_011.png)     
-It also means when placing down a <font color=red> Cross + Circle</font> Multi Note horizontally, it will be placed on the Last 2 Markers (starting from the Left)   
+It also means when placing down a <kbd><font color=red>:ac_x:+:ac_o:</font></kbd> Multi Note horizontally, it will be placed on the Last 2 Markers (starting from the Left)   
 ![](/assets/ac_rule_012.png)     
 ### 3.1 Multi Sliders<!-- {docsify-ignore} -->   
-Multi Sliders are very unique, they're the only form of Multis that can only be placed horizontally, SEGA has never made a Vertical Slider. Sliders are also a bit different when it comes to their placements, but simple to get down nonetheless. **Double-Left** Sliders stay on the **Left** Side of the screen, the **Right-Facing** Sliders stay on the **Right** side of the screen.    
+Multi Sliders are very unique, they're the only form of Multis that can only be placed horizontally, SEGA has never made a Vertical Slider. Sliders are also a bit different when it comes to their placements, but simple to get down nonetheless. **Double-Left** Sliders<kbd>:ac_l:+:ac_l:</kbd> stay on the **Left** Side of the screen, the **Right-Facing** Sliders<kbd>:ac_r:+:ac_r:</kbd> stay on the **Right** side of the screen.    
 ![](/assets/ac_rule_013.png)     
-For Multi Sliders not facing the same direction, Multi Sliders facing **Inwards should** be in the Two Markers closest to the **middle** of the screen.   
-And for the Outwards facing Multi sliders they should be in the two markers closest to the edges of the screen.   
+For Multi Sliders not facing the same direction, Multi Sliders facing **Inwards**<kbd>:ac_r:+:ac_l:</kbd> should be in the Two Markers closest to the **middle** of the screen.   
+And for the Outwards<kbd>:ac_l:+:ac_r:</kbd> facing Multi sliders they should be in the two markers closest to the edges of the screen.   
 > [!IMPORTANT]
 > **IMPORTANT**   
 > Do keep in mind Comfy has some issues with Inwards and Outwards facing sliders since the program can't guess which one you want to put down.   
@@ -72,7 +72,7 @@ It's common for newer charters to not be aware that Horizontal Multis can't be m
 ![](/assets/ac_rule_015.png)
 
 ## 4. Arcade Layout   
-The Markers and each note type assigned to it are meant to represent the positioning of the notes in the actual Arcade Controller, SEGA made their charting directly "mirror" the controller to make it easier for newer players. If they see a Triangle+Square multi on the left they will automatically press the two buttons on the left in front of them.   
+The Markers and each note type assigned to it are meant to represent the positioning of the notes in the actual Arcade Controller, SEGA made their charting directly "mirror" the controller to make it easier for newer players. If they see a <kbd>:ac_t:+:ac_s:</kbd> multi on the left they will automatically press the two buttons on the left in front of them.   
 ![](/assets/ac_rule_016.png)
 ![](/assets/ac_rule_017.png)   
 ### 4.1 Arcade Order<!-- {docsify-ignore} -->
@@ -81,10 +81,10 @@ While making a beatmap, it's very important you keep the hand movement of the pl
 Below you can find an image regarding the Arcade Order.   
 ![](/assets/ac_rule_018.png)   
 I know that image must be a bit confusing to take in but just think of the hand movement whilst playing on an Arcade Controller. When you have a sequence going from left to right you want the player to hit notes comfortably.    
-From left to right it goes: <font color=MediumSeaGreen>Triangle</font> then <font color=MediumSeaGreen>Square</font> then <font color=MediumSeaGreen>Cross</font> then <font color=MediumSeaGreen>Circle</font>   
-From right to left it goes: <font color=red>Circle</font> then <font color=red>Cross</font> then <font color=red>Square</font> then <font color=red>Triangle</font>
+From left to right it goes: :ac_t:→:ac_s:→:ac_x:→:ac_o:   
+From right to left it goes: :ac_o:→:ac_x:→:ac_s:→:ac_t: 
 
-As an example of this being used, when ur making a sequence that alternates between Square and Cross: Depending on which direction it's going to, the note types will have to swap.   
+As an example of this being used, when ur making a sequence that alternates between :ac_s: and :ac_x:\: Depending on which direction it's going to, the note types will have to swap.   
 ![](/assets/ac_rule_019.png)   
 Here's another example where the notes aren't alternating every instance.   
 ![](/assets/ac_rule_020.png)   
@@ -92,9 +92,10 @@ While this is sometimes bypassed by SEGA in higher difficulties (exex n sometime
 
 ## 5. Vertical Multis
 
-It's important to understand every multi in the game comes from a Vertical Quad note. Which means, if you delete some notes from a Quad note, you will obtain a Multi note that is correct. You are not allowed to move Multi notes away from each other vertically though (like separating the Square from the Cross, or moving certain notes from a multi closer, for example).   
+It's important to understand every multi in the game comes from a Vertical Quad note. Which means, if you delete some notes from a Quad note, you will obtain a Multi note that is correct. You are not allowed to move Multi notes away from each other vertically though (like separating the :ac_s: from the :ac_x:, or moving certain notes from a multi closer, for example).   
 ![](/assets/ac_rule_021.png)   
 ![](/assets/ac_rule_022.gif)   
+
 ### 5.1 Vertical Multi Notes in Sequences<!-- {docsify-ignore} -->   
 Whenever a Vertical Multi Note is present in a sequence, the angles for them should come from the direction the sequence is heading towards.
 ![](/assets/ac_rule_023.png)   
