@@ -1,6 +1,8 @@
 > Author: Ryan   
 > Date: 2025-07-17T14:18:01.000Z   
-> Source: https://gamebanana.com/tuts/18566     
+> Source: https://gamebanana.com/tuts/18566  
+
+<samp>A simple guide to help you make better charts.</samp>
 
 > [!NOTE]
 > **Programs needed:**  
@@ -23,19 +25,19 @@ Increasing or decreasing this value is <font color=red>not recommended</font> if
 
 Hold the <kbd>Right mouse button</kbd> on the timeline, similar to how you would use the rectangular selection tool in Windows and drag it over the notes to select them. Once the notes are selected, click anywhere with a left click on the Target Preview Window and press <kbd>2</kbd> on your keyboard to enter Angle Mode. You can rapidly switch Frequencies by pressing <kbd>R</kbd>.  
 ![](/assets/ac_rule_001.gif)  
-### 1.1 Note Frequencies <font color=MediumSeaGreen>Top (↑)</font>  
+### 1.1 Note Frequencies <font color=MediumSeaGreen>Top (↑)</font><!-- {docsify-ignore} -->   
 When going Left to Right, the Frequencies should be as shown in these example images.  
 ![](/assets/ac_rule_002.png)  
-### 1.1 Note Frequencies <font color=MediumSeaGreen>Top (↑)</font>   
+### 1.1 Note Frequencies <font color=MediumSeaGreen>Top (↑)</font><!-- {docsify-ignore} -->   
 When going Right to Left, the Frequencies should be as shown in these example images.   
 ![](/assets/ac_rule_003.png)  
-### 1.2 Note Frequencies <font color=red>Bottom (↓)</font>   
+### 1.2 Note Frequencies <font color=red>Bottom (↓)</font><!-- {docsify-ignore} -->   
 When going Left to Right, the Frequencies should be as shown in these example images.   
 ![](/assets/ac_rule_004.png)     
-### 1.2 Note Frequencies <font color=red>Bottom (↓)</font>   
+### 1.2 Note Frequencies <font color=red>Bottom (↓)</font><!-- {docsify-ignore} -->   
 When going Right to Left, the Frequencies should be as shown in these example images.   
 ![](/assets/ac_rule_005.png)     
-### 1.3 Spotting Wrong Note Frequencies   
+### 1.3 Spotting Wrong Note Frequencies<!-- {docsify-ignore} -->   
 After getting used to seeing Note Frequencies you will not need to use these example images and will automatically fix them whenever needed. But here's an example of some wrong frequencies (before SEGA gave attributes rules to improve readability.)   
 ![](/assets/ac_rule_006.png)     
 ![](/assets/ac_rule_007.png)
@@ -54,7 +56,7 @@ It means when placing down a <font color=red>Triangle + Square</font> Multi Note
 ![](/assets/ac_rule_011.png)     
 It also means when placing down a <font color=red> Cross + Circle</font> Multi Note horizontally, it will be placed on the Last 2 Markers (starting from the Left)   
 ![](/assets/ac_rule_012.png)     
-### 3.1 Multi Sliders   
+### 3.1 Multi Sliders<!-- {docsify-ignore} -->   
 Multi Sliders are very unique, they're the only form of Multis that can only be placed horizontally, SEGA has never made a Vertical Slider. Sliders are also a bit different when it comes to their placements, but simple to get down nonetheless. **Double-Left** Sliders stay on the **Left** Side of the screen, the **Right-Facing** Sliders stay on the **Right** side of the screen.    
 ![](/assets/ac_rule_013.png)     
 For Multi Sliders not facing the same direction, Multi Sliders facing **Inwards should** be in the Two Markers closest to the **middle** of the screen.   
@@ -65,7 +67,7 @@ And for the Outwards facing Multi sliders they should be in the two markers clos
 > To fix this, position the sliders in the markers corresponding to the Multi Slider you want, then use the preset feature so Comfy will do the rest.
 
 ![](/assets/ac_rule_014.png)     
-### 3.2 Spotting Wrong Horizontal Positioning   
+### 3.2 Spotting Wrong Horizontal Positioning<!-- {docsify-ignore} -->   
 It's common for newer charters to not be aware that Horizontal Multis can't be moved left and right, in the following example image, I placed down a <kbd>:ac_t:+:ac_s:</kbd> multi in the wrong marker. It might seem insignificant to you as to why this rule exists but in my next point I will explain why it's this way.
 ![](/assets/ac_rule_015.png)
 
@@ -73,7 +75,7 @@ It's common for newer charters to not be aware that Horizontal Multis can't be m
 The Markers and each note type assigned to it are meant to represent the positioning of the notes in the actual Arcade Controller, SEGA made their charting directly "mirror" the controller to make it easier for newer players. If they see a Triangle+Square multi on the left they will automatically press the two buttons on the left in front of them.   
 ![](/assets/ac_rule_016.png)
 ![](/assets/ac_rule_017.png)   
-### 4.1 Arcade Order
+### 4.1 Arcade Order<!-- {docsify-ignore} -->
 While making a beatmap, it's very important you keep the hand movement of the player in mind. You don't want to make it uncomfortable for them to play it, it's not enjoyable. In my last point I brought up the Arcade Layout and how it's used to better the experience for Arcade players with Multi notes. However this also happens with Arcade Order. Just like Frequencies, Note Types in continuous stream of notes stopped being “random” and received some rules behind them post-AC Era. SEGA wanted sequences to feel natural and optimize good hand movement in their charts. 
 
 Below you can find an image regarding the Arcade Order.   
@@ -93,13 +95,13 @@ While this is sometimes bypassed by SEGA in higher difficulties (exex n sometime
 It's important to understand every multi in the game comes from a Vertical Quad note. Which means, if you delete some notes from a Quad note, you will obtain a Multi note that is correct. You are not allowed to move Multi notes away from each other vertically though (like separating the Square from the Cross, or moving certain notes from a multi closer, for example).   
 ![](/assets/ac_rule_021.png)   
 ![](/assets/ac_rule_022.gif)   
-### 5.1 Vertical Multi Notes in Sequences   
+### 5.1 Vertical Multi Notes in Sequences<!-- {docsify-ignore} -->   
 Whenever a Vertical Multi Note is present in a sequence, the angles for them should come from the direction the sequence is heading towards.
 ![](/assets/ac_rule_023.png)   
 ![](/assets/ac_rule_024.png)   
 This can be bypassed depending on the complexity of the sequence at hand but do keep in mind you should focus on readability of your chart, you don't want to make it too cluttered visually.
 
-### 5.1.1 Vertical Multi Notes in Sequences 
+### 5.1.1 Vertical Multi Notes in Sequences<!-- {docsify-ignore} --> 
 
 When you have multiple Multi notes in a sequence, think of every square in the grid as a different note type, you have to make them line up, remember, at base they're still all a quad note split into different variations. 
 

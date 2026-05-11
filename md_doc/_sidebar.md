@@ -1,3 +1,11 @@
+- [Song Mod Creation Guide](SongModCreationGuide/Cover.md)
+    - [What You Need](SongModCreationGuide/WhatYouNeed.md) 
+    - [Introduction](SongModCreationGuide/Introduction.md)
+    - [Getting Started](SongModCreationGuide/GettingStarted.md)
+        - [Regarding DIVA’s ID System and Mod ID Reservations](SongModCreationGuide/GettingStarted/AboutIdSystem.md)
+        - [Properly Formatting Your Files](SongModCreationGuide/GettingStarted/FilesFormat.md)
+----
 - Charting
-    - [Charting Guide (General Rules)](ac_rule.md 'A simple guide to help you make better charts. ')
-    - [AC Score System](score_system.md)
+    - [Charting Guide (General Rules)](ac_rule.md 'Charting Guide (General Rules)')
+- Game System
+    - [Ac Score](score_system.md)

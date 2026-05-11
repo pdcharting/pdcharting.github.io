@@ -1,5 +1,6 @@
 # Project Diva Charting Doc  
 
-:ac_l::ac_t::ac_s::ac_x::ac_o::ac_r:
+> [!Note]**This document is still under construction.**  
+> If anyone wants to contribute, please contact me.
 
-- [Charting Guide (General Rules) By Ryan](ac_rule)
+[menu](_sidebar.md ':include')
