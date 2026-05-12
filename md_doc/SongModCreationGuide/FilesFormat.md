@@ -30,7 +30,8 @@ If you are going to be utilizing a video file, you will want to download video f
 
 **If you download a file in <font color=green>.WEBM</font> format, it should always have a VP9 codec. So utilize that when you have the option!**
 
-> [!Tip]If your only codec download option is H264 (which is typical for older videos on sites like Nico Nico Douga), it may be less costly to convert your video to VP9 codec via FFmpeg before converting it into a .USM container. If you’re editing videos, you can use plug-ins such as the AdobeWebM extension for Adobe Premiere Pro to add a .WEBM export option, which has VP9 codec by default.
+> [!Tip]If your only codec download option is H264 (which is typical for older videos on sites like Nico Nico Douga), it may be less costly to convert your video to VP9 codec via FFmpeg before converting it into a .USM container.   
+If you’re editing videos, you can use plug-ins such as the AdobeWebM extension for Adobe Premiere Pro to add a .WEBM export option, which has VP9 codec by default.
 
 
 Otherwise, formats do not matter as they will be converted later by the tools this guide will go over. Download whatever will give you the highest quality out of the options available. For example, <font color=green>.MP4</font> for video or <font color=green>.WAV/.OPUS/.M4A</font> for audio. **Based on my own experience, I would avoid <font color=green>.MP3</font> formats** as they can cut out any blank space at the beginning of the audio file and cause your video to become unsynced.
@@ -51,7 +52,7 @@ I will cover this in two steps: converting your video, and converting your audio
 ### Converting Your Video Files (.USM)  
 For converting your video file, you have two options:
 - [Wannacri_GUI][usm_hiki8man] by Hiki8man
-- [WannaCriCS][usm_RERASER]
+- [WannaCriCS][usm_RERASER] by RERASER
     - NOTE: Some people have had various issues with this software, such as files not converting fully and/or the YouTube download function not working. While it’s recommended that you download the video manually and use the former option, you can still use this converter in “local” mode.
 
 An important note about these two softwares is that they are both unfortunately named similarly to the infamous WannaCry ransomware attack, which will more likely than not cause it to be flagged as a virus. **Both files are safe, and I would recommend looking into making an exclusion for them in your antivirus software.** If you are ever concerned about whether or not a file is malicious, I recommend scanning it through VirusTotal to obtain a detailed report. The reports for both software can be found here:
