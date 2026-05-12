@@ -48,7 +48,7 @@ Your song mod will utilize specific formats:
 
 I will cover this in two steps: converting your video, and converting your audio. **Feel free to disregard the video conversion step and wait until later in the guide for a tutorial on how to set-up sprite backgrounds.**
 
-### Converting Your Video Files (<font color=green>.USM</font>)  
+### Converting Your Video Files (.USM)  
 For converting your video file, you have two options:
 - [Wannacri_GUI][usm_hiki8man] by Hiki8man
 - [WannaCriCS][usm_RERASER]
@@ -69,7 +69,7 @@ If you are using WannaCriCS, be sure that you select Local mode and use videos t
 
 Please note that Comfy Studio does not support <font color=green>.USM</font> file formats, so you should always keep a back-up of your original files just in case you need to revisit your charts.
 
-### Converting Your Audio Files (<font color=green>.OGG</font>)  
+### Converting Your Audio Files (.OGG)  
 While the audio output from the previous step should suffice, I recommend using a software like Audacity to reconvert your original files to <font color=green>.OGG</font>, giving it the best possible quality and the ability to add other things if you choose. I will be using Audacity in this guide.
 
 Before we start, I want to go over how the game’s song files are formatted for Mega Mix+ specifically. The DIVA games have a feature where the vocal tracks will stop playing if you miss notes. This is done by separating the vocal stems from the instrumentals, and storing them as separate channels. This means **Mega Mix+ utilizes up to 4 audio channels**:  
@@ -89,14 +89,57 @@ The audio channels must be mapped to channels 1, 2, 3, and 4 respectively in ord
 ### Normalizing Audio
 For this section, there is a video guide by AWaffleBird that goes over similar topics to this section. If you wish to do so, watch it [here][AWaffleBird_video].
 
-Mega Mix+, interestingly, decreases the perceived loudness of an audio file for use in-game. There’s an easy way to do this in Audacity by using the “Loudness Normalization…” effect. Simply <kbd>Ctrl</kbd>+<kbd>A</kbd> to select all of your audio tracks, and navigate to “Effect”, then “Volume and Compression”, then “Loudness Normalization…”   
+1. Mega Mix+, interestingly, decreases the perceived loudness of an audio file for use in-game. There’s an easy way to do this in Audacity by using the “Loudness Normalization…” effect. Simply <kbd>Ctrl</kbd>+<kbd>A</kbd> to select all of your audio tracks, and navigate to “Effect”, then “Volume and Compression”, then “Loudness Normalization…”   
 ![Loudness Normalization menu][loudness_normalization_menu]
 
-You will be given a window to put in your normalization options. Make sure that “perceived loudness” is selected, that “Normalize stereo channels independently” is unchecked, and “Treat mono as dual-mono (recommended)” is checked. Setting the normalization to -15.0 LUFS works for most songs, but you may need to experiment.  
+2. You will be given a window to put in your normalization options. Make sure that “perceived loudness” is selected, that “Normalize stereo channels independently” is unchecked, and “Treat mono as dual-mono (recommended)” is checked. Setting the normalization to -15.0 LUFS works for most songs, but you may need to experiment.  
 ![Loudness Normalization Setting][loudness_normalization_setting]  
-When you’re done, click “Apply”. The waveforms will be a lot smaller like the below image.  
+3. When you’re done, click “Apply”. The waveforms will be a lot smaller like the below image.  
 ![Loudness Normalization Done][loudness_normalization_done]
 
+### (Optional) Splitting Vocal and Instrumental Stems   
+If you don’t want to go through the process of splitting your audio, skip to the [Exporting Audio header](#exporting-audio). **For the most accurate output, it’s recommended to normalize your audio with the original file before splitting stems.**
+
+There are different software that you can use to separate vocals. A common software that was recommended in the community over the years is [Ultimate Vocal Remover 5][UVR5_link], although you aren’t confined to this. **You should always check to see if the stems were separated accurately and didn’t cause any audio loss after converting.** It may be easier to look for split vocal and instrumental stems and resyncing your chart to that instead of fighting with algorithms for a proper output.
+
+1. Once your instrumentals and vocals are split, they will look something like this when imported (before normalization). These are two tracks with a Left and Right channel each.  
+![split vocal example][split_vocal_example]  
+2. Once you’ve normalized and split your audio, right click on each track and select “Split Stereo to Mono”.  
+![Split Stereo to Mono][split_to_mono]  
+3. When you’re done, everything should be split up into four tracks like this.
+![split vocal done][split_vocal_done]
+> [!Tip] If you feel like you will have trouble keeping up with which track is which, feel free to rename them. It may be helpful when exporting.
+
+### Exporting Audio  
+When you are ready to export your audio, navigate to “File”, then “Export Audio…” 
+![Export Audio Option][export_audio]  
+Select the option “Export to computer”.  
+![Export to computer][export_audio_to_pc]  
+I typically work with one file at a time per project. If you are working with multiple files, please adjust the “Export Range” accordingly. Otherwise, if you didn’t set-up your file to use four channels, you’re fine to leave these settings as follows:  
+```
+- File Name: pv_####.ogg
+    - Note: Replace #### with the Song ID you are using for the song. You should have reserved this earlier in the guide.
+- Channels: Stereo
+- Format: Ogg Vorbis FIles
+- Audio options:
+    - Channels: Stereo
+    - Sample Rate: 44100 Hz
+    - Quality: 8
+```
+![Export Audio Setting][export_audio_setting]  
+>[!Tip]<font color=green>.OGG</font> is a lossy format, so it is your choice if you want to increase the quality. **However, increasing it will drastically bloat your file size, so most people will advise against it.**  
+A Quality setting of 8 is generally recommended, as it’s a good balance of file size and audio quality. However, double check to make sure that there isn’t any major quality loss.
+
+If you did not have split vocals and instrumentals, you’re free to proceed to the next header. However, **if you did have split vocals and instrumentals, you should select “Custom Mapping”.**  
+![Custom mapping][configure_mapping]  
+Remember to link up your channels like the following (the names are not relevant):  
+1. Left Instrumental Channel to Channel: 1
+2. Right Instrumental Channel to Channel: 2
+3. Left Vocal Channel to Channel: 3
+4. Right Vocal Channel to Channel: 4
+
+![mixing mapping example][mixing_mapping_example]  
+Once that’s set-up, click “OK” and hit “Export” on the main “Export Audio” window!
 <!--- link --->
 [ytdlp_link]:https://github.com/yt-dlp/yt-dlp
 [ytdlp_gui_link]:https://github.com/kannagi0303/yt-dlp-gui
@@ -106,6 +149,7 @@ When you’re done, click “Apply”. The waveforms will be a lot smaller like 
 [usm_hiki8man_report]:https://www.virustotal.com/gui/file/a7ee1ad107f50e1fe315439932f3f5504ec1ec79183a6ed82bb0fca8d7dfbb03
 [usm_RERASER_report]:https://www.virustotal.com/gui/file/25f6333de3789ee7de0e587ef7fc1095b6c8f99adc3fe56fe6bd7b40a9093776/detection
 [AWaffleBird_video]:https://www.youtube.com/watch?v=Co3rr6CGGAo
+[UVR5_link]:https://github.com/Anjok07/ultimatevocalremovergui
 <!--- image --->
 [USM_Conversion_Example]:assets/image60.webp
 [wannacri_GUI_Example]:assets/image19.png
@@ -115,3 +159,11 @@ When you’re done, click “Apply”. The waveforms will be a lot smaller like 
 [loudness_normalization_menu]:assets/image40.png
 [loudness_normalization_setting]:assets/image53.png
 [loudness_normalization_done]:assets/image51.png
+[split_vocal_example]:assets/image42.png
+[split_to_mono]:assets/image14.png
+[split_vocal_done]:assets/image57.png
+[export_audio]:assets/image18.png
+[export_audio_to_pc]:assets/image1.png
+[export_audio_setting]:assets/image37.png
+[configure_mapping]:assets/image11.png
+[mixing_mapping_example]:assets/image12.png
