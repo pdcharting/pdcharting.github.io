@@ -3,15 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>矢量画布 - 钢笔工具</title>
+<title>comfy排版工具 vibe版</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: "Microsoft YaHei", sans-serif; background: #1a1a2e; color: #e0e0e0; display: flex; height: 100vh; overflow: hidden; }
 
   .sidebar {
     width: 280px; background: #16213e; padding: 16px; display: flex; flex-direction: column; gap: 12px;
-    border-right: 1px solid #0f3460; overflow-y: auto; flex-shrink: 0;
+    overflow-y: auto; flex-shrink: 0;
   }
+  .sidebar-left { border-right: 1px solid #0f3460; }
+  .sidebar-right { border-left: 1px solid #0f3460; }
   .sidebar h2 { font-size: 16px; color: #e94560; margin-bottom: 4px; }
   .sidebar h3 { font-size: 13px; color: #a0a0b0; margin: 8px 0 4px; }
 
@@ -34,8 +36,8 @@
   .btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
 
   .point-list {
-    flex: 1; overflow-y: auto; background: #0f3460; border-radius: 4px; padding: 8px;
-    font-size: 12px; max-height: 200px;
+    flex: 1; min-height: 120px; overflow-y: auto; background: #0f3460; border-radius: 4px; padding: 8px;
+    font-size: 12px;
   }
   .point-item {
     display: flex; justify-content: space-between; align-items: center;
@@ -64,75 +66,197 @@
 
   .hint { font-size: 11px; color: #606080; line-height: 1.5; }
   .hint kbd { background: #0f3460; padding: 1px 5px; border-radius: 3px; border: 1px solid #1a4080; font-size: 10px; }
+
+  .target-textarea {
+    width: 100%;
+    min-height: 180px;
+    background: #0f3460;
+    border: 1px solid #1a4080;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 11px;
+    padding: 8px;
+    resize: vertical;
+    font-family: monospace;
+    line-height: 1.4;
+  }
+  .target-textarea:focus { border-color: #e94560; outline: none; }
+
+  .lang-toggle {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+    min-width: 40px;
+  }
 </style>
 </head>
 <body>
 
-<div class="sidebar">
-  <h2>矢量画布</h2>
-  <p class="hint">
-    点击添加尖点锚点。<br>
-    拖拽锚点移动，拖拽手柄调整曲线。<br>
-    <kbd>Ctrl</kbd>+拖拽锚点：转为平滑并拉出手柄。<br>
-    <kbd>Ctrl</kbd>+拖拽手柄(平滑)：断开对称，转为转角。<br>
-    双击锚点：转为尖点并清除手柄。<br>
-    双击手柄(转角)：对齐另一手柄，转为平滑。<br>
-    双击线段：转曲线。
-  </p>
+<div class="sidebar sidebar-left">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+    <h2 data-i18n="appTitle">comfy排版工具</h2>
+    <button class="secondary lang-toggle" id="btnLang" onclick="toggleLanguage()">EN</button>
+  </div>
 
-  <h3>操作</h3>
+  <h3 data-i18n="operations">操作</h3>
   <div class="btn-row">
-    <button class="secondary" onclick="clearAll()">清空画布</button>
-    <button class="secondary" onclick="undoAction()">撤销</button>
-    <button class="secondary" onclick="closePath()">闭合路径</button>
-    <button class="secondary" onclick="dumpDebug()">Debug</button>
+    <button class="secondary" data-i18n="clearCanvas" onclick="clearAll()">清空画布</button>
+    <button class="secondary" data-i18n="undo" onclick="undoAction()">撤销</button>
+    <button class="secondary" data-i18n="closePath" onclick="closePath()">闭合路径</button>
   </div>
 
-  <h3>绘制圆形</h3>
+  <h3 data-i18n="drawCircle">绘制圆形</h3>
   <div class="input-row">
-    <label>半径</label><input type="number" id="circleRadius" value="200" min="1" max="5000">
-    <button onclick="drawCircle()">绘制</button>
+    <label data-i18n="radius">半径</label><input type="number" id="circleRadius" value="200" min="1" max="5000">
+    <button data-i18n="draw" onclick="drawCircle()">绘制</button>
   </div>
 
-  <h3>锚点列表</h3>
-  <div class="point-list" id="pointList"></div>
-
-  <h3>Target 数据</h3>
-  <textarea id="targetInput" rows="4" style="width:100%;background:#0f3460;border:1px solid #1a4080;border-radius:4px;color:#e0e0e0;font-size:11px;padding:6px;resize:vertical;font-family:monospace;" placeholder="粘贴 Target 数据..."></textarea>
+  <h3 data-i18n="targetData">Target 数据</h3>
+  <textarea id="targetInput" class="target-textarea" rows="10" data-i18n-placeholder="targetPlaceholder" placeholder="粘贴 Target 数据..."></textarea>
   <div class="btn-row" style="margin-top:6px;">
-    <button class="secondary" onclick="importTarget()">导入</button>
+    <button class="secondary" data-i18n="import" onclick="importTarget()">导入</button>
   </div>
   <div id="targetInfo" style="font-size:11px;color:#808090;margin-top:4px;"></div>
 
-  <h3>Target 输出</h3>
-  <textarea id="targetOutput" rows="4" readonly style="width:100%;background:#0f3460;border:1px solid #1a4080;border-radius:4px;color:#e0e0e0;font-size:11px;padding:6px;resize:vertical;font-family:monospace;"></textarea>
+  <h3 data-i18n="targetOutput">Target 输出</h3>
+  <textarea id="targetOutput" class="target-textarea" rows="10" readonly></textarea>
   <div class="btn-row" style="margin-top:6px;">
-    <button class="secondary" onclick="exportTarget()">导出</button>
-    <button class="secondary" onclick="copyOutput()">复制</button>
+    <button class="secondary" data-i18n="export" onclick="exportTarget()">导出</button>
+    <button class="secondary" data-i18n="copy" onclick="copyOutput()">复制</button>
   </div>
-
-  <h3>Debug 输出</h3>
-  <div class="point-list" id="debugOutput" style="white-space:pre-wrap; font-family:monospace; min-height:60px;">点击 Debug 按钮输出数据</div>
 </div>
 
 <div class="canvas-wrap">
   <div class="toolbar">
-    <button onclick="toggleGrid()" id="btnGrid">网格</button>
-    <button onclick="toggleHandles()" id="btnHandles" class="active">手柄</button>
-    <button onclick="toggleTarget()" id="btnTarget" class="active">Target</button>
-    <select id="zoomSelect" onchange="setZoom(this.value)">
-      <option value="0.5">50%</option>
-      <option value="0.8" selected>80%</option>
-      <option value="1">100%</option>
-    </select>
-    <input type="number" id="zoomInput" placeholder="自定义%" min="20" max="2000" style="width:60px;padding:4px 6px;background:#0f3460;border:1px solid #1a4080;border-radius:4px;color:#e0e0e0;font-size:12px;" onkeydown="if(event.key==='Enter')setZoomCustom(this.value)">
-    <span id="rotationDisplay" style="font-size:12px;color:#a0a0b0;padding:0 4px;">0°</span>
+    <button data-i18n="grid" onclick="toggleGrid()" id="btnGrid">网格</button>
+    <button data-i18n="handles" onclick="toggleHandles()" id="btnHandles" class="active">手柄</button>
+    <button data-i18n="target" onclick="toggleTarget()" id="btnTarget" class="active">Target</button>
+    <input type="number" id="zoomInput" value="100" min="20" max="2000" style="width:60px;padding:4px 6px;background:#0f3460;border:1px solid #1a4080;border-radius:4px;color:#e0e0e0;font-size:12px;" onkeydown="if(event.key==='Enter')setZoomCustom(this.value)" onchange="setZoomCustom(this.value)">
+    <input type="number" id="rotationInput" value="0" step="0.1" style="width:55px;padding:4px 6px;background:#0f3460;border:1px solid #1a4080;border-radius:4px;color:#e0e0e0;font-size:12px;" onkeydown="if(event.key==='Enter')setRotationCustom(this.value)" onchange="setRotationCustom(this.value)">
+    <span style="font-size:12px;color:#a0a0b0;">°</span>
   </div>
   <canvas id="canvas"></canvas>
-  <div class="info-bar" id="infoBar">坐标: 0, 0</div>
+  <div class="info-bar" id="infoBar"></div>
+</div>
+
+<div class="sidebar sidebar-right">
+  <h3 data-i18n="help">帮助</h3>
+  <p class="hint" id="hintBox"></p>
+
+  <h3 data-i18n="pointList">锚点列表</h3>
+  <div class="point-list" id="pointList"></div>
 </div>
 
 <script>
+let lang = localStorage.getItem('lang') || 'zh';
+
+const I18N = {
+  zh: {
+    title: 'comfy排版工具 vibe版',
+    appTitle: 'comfy排版工具',
+    operations: '操作',
+    clearCanvas: '清空画布',
+    undo: '撤销',
+    closePath: '闭合路径',
+    drawCircle: '绘制圆形',
+    radius: '半径',
+    draw: '绘制',
+    targetData: 'Target 数据',
+    targetPlaceholder: '粘贴 Target 数据...',
+    import: '导入',
+    targetOutput: 'Target 输出',
+    export: '导出',
+    copy: '复制',
+    grid: '网格',
+    handles: '手柄',
+    target: 'Target',
+    help: '帮助',
+    pointList: '锚点列表',
+    langSwitch: 'EN',
+    coords: '坐标',
+    zoom: '缩放',
+    typeSmooth: '平滑',
+    typeCorner: '转角',
+    typePlain: '尖点',
+    targetInfoPoints: '{0} 个点, tick: {1} ~ {2}',
+    noTargetData: '未解析到数据',
+    hint: '点击添加尖点锚点。<br>拖拽锚点移动，拖拽手柄调整曲线。<br><kbd>Ctrl</kbd>+拖拽锚点：转为平滑并拉出手柄。<br><kbd>Ctrl</kbd>+拖拽手柄(平滑)：断开对称，转为转角。<br>双击锚点：转为尖点并清除手柄。<br>双击手柄(转角)：对齐另一手柄，转为平滑。<br>双击线段：转曲线。<br><kbd>Shift</kbd>+滚轮：旋转路径。<br>工具栏可输入缩放与旋转角度。',
+  },
+  en: {
+    title: 'comfy PathTool Vibe',
+    appTitle: 'comfy PathTool',
+    operations: 'Operations',
+    clearCanvas: 'Clear',
+    undo: 'Undo',
+    closePath: 'Close Path',
+    drawCircle: 'Draw Circle',
+    radius: 'R',
+    draw: 'Draw',
+    targetData: 'Target Data',
+    targetPlaceholder: 'Paste Target data...',
+    import: 'Import',
+    targetOutput: 'Target Output',
+    export: 'Export',
+    copy: 'Copy',
+    grid: 'Grid',
+    handles: 'Handles',
+    target: 'Target',
+    help: 'Help',
+    pointList: 'Points',
+    langSwitch: '中文',
+    coords: 'Coords',
+    zoom: 'Zoom',
+    typeSmooth: 'Smooth',
+    typeCorner: 'Corner',
+    typePlain: 'Sharp',
+    targetInfoPoints: '{0} points, tick: {1} ~ {2}',
+    noTargetData: 'No data parsed',
+    hint: 'Click to add sharp anchor points.<br>Drag anchors to move, drag handles to adjust curves.<br><kbd>Ctrl</kbd>+drag anchor: smooth point and pull handles.<br><kbd>Ctrl</kbd>+drag handle (smooth): break symmetry, convert to corner.<br>Double-click anchor: sharp point and clear handles.<br>Double-click handle (corner): align opposite handle, convert to smooth.<br>Double-click segment: convert to curve.<br><kbd>Shift</kbd>+wheel: rotate path.<br>Toolbar accepts zoom and rotation input.',
+  },
+};
+
+function t(key, ...args) {
+  let str = (I18N[lang] && I18N[lang][key]) || I18N.zh[key] || key;
+  args.forEach((a, i) => { str = str.replace(`{${i}}`, a); });
+  return str;
+}
+
+function applyLanguage() {
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  document.title = t('title');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+  });
+  document.getElementById('hintBox').innerHTML = t('hint');
+  document.getElementById('btnLang').textContent = t('langSwitch');
+  refreshTargetInfo();
+  updateList();
+  updateInfoBar(lastMouseX, lastMouseY);
+}
+
+function toggleLanguage() {
+  lang = lang === 'zh' ? 'en' : 'zh';
+  localStorage.setItem('lang', lang);
+  applyLanguage();
+}
+
+function refreshTargetInfo() {
+  const info = document.getElementById('targetInfo');
+  if (targetData.length > 0) {
+    const t0 = targetData[0].tick, t1 = targetData[targetData.length - 1].tick;
+    info.textContent = t('targetInfoPoints', targetData.length, t0, t1);
+  } else if (info.dataset.empty === '1') {
+    info.textContent = t('noTargetData');
+  }
+}
+
+let lastMouseX = 0, lastMouseY = 0;
+function updateInfoBar(mx, my) {
+  infoBar.textContent = `${t('coords')}: ${Math.round(mx)}, ${Math.round(my)}  ${t('zoom')}: ${Math.round(zoomPercent)}%`;
+}
+
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const infoBar = document.getElementById('infoBar');
@@ -147,7 +271,8 @@ let showTarget = true;
 let selectedIdx = -1;
 let dragging = null;
 let targetData = [];
-let viewX = 0, viewY = 0, zoom = 0.8;
+let viewX = 0, viewY = 0, zoom = 1;
+let zoomPercent = 100;
 let pathRotation = 0;
 const FRAME_W = 1920, FRAME_H = 1080;
 
@@ -169,11 +294,22 @@ const COL = {
   targetStroke: 'rgba(0,255,136,0.8)',
 };
 
+function getFitZoom() {
+  const w = canvas.parentElement;
+  return w.clientWidth > 0 ? w.clientWidth / FRAME_W : 1;
+}
+
+function applyZoomPercent() {
+  zoom = getFitZoom() * (zoomPercent / 100);
+}
+
 function resize() {
   const w = canvas.parentElement;
   canvas.width = w.clientWidth;
   canvas.height = w.clientHeight;
+  applyZoomPercent();
   centerFrame();
+  updateZoomInput();
   render();
 }
 window.addEventListener('resize', resize);
@@ -190,21 +326,36 @@ function worldToScreen(wx, wy) {
   return { x: wx * zoom + viewX, y: wy * zoom + viewY };
 }
 
-function setZoom(val) {
-  const z = parseFloat(val);
-  if (!z || z < 0.2 || z > 20) return;
+function updateZoomInput() {
+  document.getElementById('zoomInput').value = Math.round(zoomPercent);
+}
+
+function setZoomCustom(val) {
+  const pct = parseFloat(val);
+  if (!pct || pct < 20 || pct > 2000) return;
   const cx = canvas.width / 2, cy = canvas.height / 2;
-  const w = screenToWorld(cx, cy);
-  zoom = z;
-  viewX = cx - w.x * zoom;
-  viewY = cy - w.y * zoom;
-  document.getElementById('zoomSelect').value = val;
+  const world = screenToWorld(cx, cy);
+  zoomPercent = pct;
+  applyZoomPercent();
+  viewX = cx - world.x * zoom;
+  viewY = cy - world.y * zoom;
+  updateZoomInput();
   render();
 }
-function setZoomCustom(val) {
-  const z = parseFloat(val) / 100;
-  if (!z || z < 0.2 || z > 20) return;
-  setZoom(z);
+
+function updateRotationInput() {
+  document.getElementById('rotationInput').value = (pathRotation * 180 / Math.PI).toFixed(1);
+}
+
+function setRotationCustom(deg) {
+  const target = parseFloat(deg);
+  if (isNaN(target)) return;
+  const currentDeg = pathRotation * 180 / Math.PI;
+  const delta = (target - currentDeg) * Math.PI / 180;
+  if (Math.abs(delta) < 1e-9) return;
+  rotatePath(delta);
+  pathRotation += delta;
+  updateRotationInput();
 }
 
 function toggleTarget() {
@@ -223,7 +374,12 @@ function parseTargetData(text) {
     if (!match) continue;
     const nums = match[1].trim().split(/\s+/).map(Number);
     if (nums.length >= 8 && !isNaN(nums[0]) && !isNaN(nums[nums.length - 6]) && !isNaN(nums[nums.length - 5])) {
-      results.push({ tick: nums[0], x: nums[nums.length - 6], y: nums[nums.length - 5] });
+      results.push({
+        tick: nums[0],
+        layoutFlag: nums.length > 2 && !isNaN(nums[2]) ? nums[2] : 0,
+        x: nums[nums.length - 6],
+        y: nums[nums.length - 5],
+      });
     }
   }
   return results;
@@ -235,9 +391,11 @@ function importTarget() {
   const info = document.getElementById('targetInfo');
   if (targetData.length > 0) {
     const t0 = targetData[0].tick, t1 = targetData[targetData.length - 1].tick;
-    info.textContent = `${targetData.length} 个点, tick: ${t0} ~ ${t1}`;
+    info.textContent = t('targetInfoPoints', targetData.length, t0, t1);
+    info.dataset.empty = '0';
   } else {
-    info.textContent = '未解析到数据';
+    info.textContent = t('noTargetData');
+    info.dataset.empty = '1';
   }
   render();
 }
@@ -266,7 +424,8 @@ function exportTarget() {
       prevSeg = pos.seg; prevT = pos.t;
       prevPt = { x: pos.x, y: pos.y };
     } else {
-      const dist = getPointTickScale(0);
+      const tickStep = targetData[idx].tick - targetData[idx - 1].tick;
+      const dist = tickDeltaToDistance(tickStep, prevSeg);
       const pos = findPointAtDistance(segTables, count, prevPt, dist, prevSeg, prevT);
       positions.push(pos);
       prevSeg = pos.seg; prevT = pos.t;
@@ -285,6 +444,12 @@ function exportTarget() {
     const nums = match[1].trim().split(/\s+/);
     nums[nums.length - 6] = positions[tIdx].x.toFixed(2);
     nums[nums.length - 5] = positions[tIdx].y.toFixed(2);
+    if (nums.length > 2 && Number(nums[2]) === 0) nums[2] = '1';
+    if (nums.length > 1 && Number(nums[1]) === 0) {
+      nums[nums.length - 3] = '-2.00';
+      nums[nums.length - 2] = '500.00';
+      nums[nums.length - 1] = '1200.00';
+    }
     tIdx++;
     return `Target { ${nums.join(' ')} };`;
   });
@@ -335,28 +500,23 @@ function getPointTickScale(idx) {
   return points[idx] && points[idx].tickScale ? points[idx].tickScale : 96;
 }
 
+/** tickScale 表示 24 tick 对应的像素距离，如 96→24tick=96px, 12tick=48px */
+function tickDeltaToDistance(tickDelta, segIdx) {
+  return tickDelta * (getPointTickScale(segIdx) / 24);
+}
+
 document.addEventListener('keydown', e => {
   if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undoAction(); }
 });
 
 canvas.addEventListener('wheel', e => {
+  if (!e.shiftKey) return;
   e.preventDefault();
-  if (e.shiftKey) {
-    const step = 5 * Math.PI / 180;
-    const angle = e.deltaY < 0 ? step : -step;
-    rotatePath(angle);
-    pathRotation += angle;
-    document.getElementById('rotationDisplay').textContent = `${(pathRotation * 180 / Math.PI).toFixed(1)}°`;
-  } else {
-    const factor = e.deltaY < 0 ? 1.1 : 0.9;
-    const cx = canvas.width / 2, cy = canvas.height / 2;
-    const w = screenToWorld(cx, cy);
-    zoom *= factor;
-    zoom = Math.max(0.2, Math.min(20, zoom));
-    viewX = cx - w.x * zoom;
-    viewY = cy - w.y * zoom;
-  }
-  render();
+  const step = 5 * Math.PI / 180;
+  const angle = e.deltaY < 0 ? step : -step;
+  rotatePath(angle);
+  pathRotation += angle;
+  updateRotationInput();
 }, { passive: false });
 
 function rotatePath(angle) {
@@ -456,7 +616,7 @@ function updateList() {
   points.forEach((p, i) => {
     const d = document.createElement('div');
     d.className = 'point-item' + (i === selectedIdx ? ' selected' : '');
-    const label = p.type === 'smooth' ? '平滑' : (p.type === 'corner' ? '转角' : '尖点');
+    const label = p.type === 'smooth' ? t('typeSmooth') : (p.type === 'corner' ? t('typeCorner') : t('typePlain'));
     const ts = p.tickScale || 96;
     d.innerHTML = `
       <span class="coords">P${i}: (${Math.round(p.x)}, ${Math.round(p.y)})</span>
@@ -584,7 +744,8 @@ canvas.addEventListener('mousemove', e => {
   const r = canvas.getBoundingClientRect();
   const sx = e.clientX - r.left, sy = e.clientY - r.top;
   const { x: mx, y: my } = screenToWorld(sx, sy);
-  infoBar.textContent = `坐标: ${Math.round(mx)}, ${Math.round(my)}  缩放: ${(zoom * 100).toFixed(0)}%`;
+  lastMouseX = mx; lastMouseY = my;
+  updateInfoBar(mx, my);
 
   if (!dragging) return;
   mousedownMoved = true;
@@ -809,7 +970,8 @@ function drawTargetPoints() {
       prevSeg = pos.seg;
       prevT = pos.t;
     } else {
-      const dist = getPointTickScale(0);
+      const tickStep = td.tick - targetData[idx - 1].tick;
+      const dist = tickDeltaToDistance(tickStep, prevSeg);
       const pos = findPointAtDistance(segTables, count, prevPt, dist, prevSeg, prevT);
       px = pos.x; py = pos.y;
       prevSeg = pos.seg;
@@ -1007,100 +1169,8 @@ function drawAnchors() {
 }
 
 
-function dumpDebug() {
-  const n = points.length;
-  const count = closed ? n : n - 1;
-  const lines = [];
-
-  lines.push(`锚点数: ${n}, 闭合: ${closed}`);
-  lines.push('');
-
-  points.forEach((p, i) => {
-    lines.push(`P${i} ${p.type} (${p.x.toFixed(1)}, ${p.y.toFixed(1)}) tickScale:${p.tickScale || 96}`);
-    if (p.hIn)  lines.push(`  hIn:  (${p.hIn.x.toFixed(1)}, ${p.hIn.y.toFixed(1)})`);
-    if (p.hOut) lines.push(`  hOut: (${p.hOut.x.toFixed(1)}, ${p.hOut.y.toFixed(1)})`);
-  });
-
-  lines.push('');
-  for (let i = 0; i < count; i++) {
-    const a = points[i], b = points[(i + 1) % n];
-    const isCurve = a.hOut || b.hIn;
-    if (isCurve) {
-      const c1 = a.hOut || a, c2 = b.hIn || b;
-      lines.push(`Seg ${i}: C (${c1.x.toFixed(1)},${c1.y.toFixed(1)}) (${c2.x.toFixed(1)},${c2.y.toFixed(1)}) (${b.x.toFixed(1)},${b.y.toFixed(1)})`);
-    } else {
-      lines.push(`Seg ${i}: L (${b.x.toFixed(1)},${b.y.toFixed(1)})`);
-    }
-  }
-
-  const svgPath = buildSVGPathD();
-  lines.push('');
-  lines.push('SVG path d:');
-  lines.push(svgPath);
-
-  if (targetData.length > 0 && n >= 2) {
-    lines.push('');
-    lines.push(`Target 点 (${targetData.length} 个):`);
-    const segTables = [];
-    for (let i = 0; i < count; i++) {
-      const a = points[i], b = points[(i + 1) % n];
-      const cp1 = a.hOut || a, cp2 = b.hIn || b;
-      segTables.push(buildArcTable(a, cp1, cp2, b));
-    }
-    const t0 = targetData[0].tick;
-
-    let prevPt = null;
-    let prevSeg = 0;
-    let prevT = 0;
-
-    targetData.forEach((td, idx) => {
-      const tickDelta = td.tick - t0;
-      let px, py;
-
-      if (idx === 0) {
-        const pos = findPosByTick(segTables, count, tickDelta);
-        px = pos.x; py = pos.y;
-        prevSeg = pos.seg;
-        prevT = pos.t;
-      } else {
-        const dist = getPointTickScale(0);
-        const pos = findPointAtDistance(segTables, count, prevPt, dist, prevSeg, prevT);
-        px = pos.x; py = pos.y;
-        prevSeg = pos.seg;
-        prevT = pos.t;
-      }
-
-      prevPt = { x: px, y: py };
-      lines.push(`  T${idx} tick:${td.tick} (${px.toFixed(1)}, ${py.toFixed(1)})`);
-    });
-  }
-
-  const el = document.getElementById('debugOutput');
-  el.textContent = lines.join('\n');
-  console.log('[Debug]', JSON.stringify({ points, closed }, null, 2));
-}
-
-function buildSVGPathD() {
-  if (!points.length) return '';
-  let d = '';
-  const n = points.length;
-  const count = closed ? n : n - 1;
-  points.forEach((p, i) => {
-    if (i === 0) d += `M ${p.x.toFixed(1)} ${p.y.toFixed(1)} `;
-    if (i >= count && !closed) return;
-    const b = points[(i + 1) % n];
-    if (p.hOut || b.hIn) {
-      const c1 = p.hOut || p, c2 = b.hIn || b;
-      d += `C ${c1.x.toFixed(1)} ${c1.y.toFixed(1)} ${c2.x.toFixed(1)} ${c2.y.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)} `;
-    } else {
-      d += `L ${b.x.toFixed(1)} ${b.y.toFixed(1)} `;
-    }
-  });
-  if (closed) d += 'Z';
-  return d.trim();
-}
-
 resize();
+applyLanguage();
 </script>
 </body>
 </html>
