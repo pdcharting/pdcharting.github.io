@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>矢量画布 - 钢笔工具</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Microsoft YaHei", sans-serif; background: #1a1a2e; color: #e0e0e0; display: flex; height: 100vh; overflow: hidden; }
+
+  .sidebar {
+    width: 280px; background: #16213e; padding: 16px; display: flex; flex-direction: column; gap: 12px;
+    border-right: 1px solid #0f3460; overflow-y: auto; flex-shrink: 0;
+  }
+  .sidebar h2 { font-size: 16px; color: #e94560; margin-bottom: 4px; }
+  .sidebar h3 { font-size: 13px; color: #a0a0b0; margin: 8px 0 4px; }
+
+  .input-row { display: flex; gap: 6px; align-items: center; }
+  .input-row input {
+    width: 80px; padding: 6px 8px; background: #0f3460; border: 1px solid #1a4080; border-radius: 4px;
+    color: #e0e0e0; font-size: 13px; text-align: center;
+  }
+  .input-row input:focus { border-color: #e94560; outline: none; }
+  .input-row label { font-size: 12px; color: #808090; width: 16px; }
+
+  button {
+    padding: 7px 14px; background: #e94560; color: white; border: none; border-radius: 4px;
+    cursor: pointer; font-size: 13px; transition: background 0.2s;
+  }
+  button:hover { background: #c73652; }
+  button.secondary { background: #0f3460; border: 1px solid #1a4080; }
+  button.secondary:hover { background: #1a4080; }
+
+  .btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .point-list {
+    flex: 1; overflow-y: auto; background: #0f3460; border-radius: 4px; padding: 8px;
+    font-size: 12px; max-height: 200px;
+  }
+  .point-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 4px 6px; border-bottom: 1px solid #1a4080; cursor: pointer;
+  }
+  .point-item:hover { background: #1a4080; }
+  .point-item.selected { background: #2a2a5e; border-left: 3px solid #e94560; }
+  .point-item .coords { color: #c0c0d0; }
+  .point-item .type { font-size: 10px; color: #00d2ff; }
+  .point-item .delete-btn {
+    background: none; border: none; color: #e94560; cursor: pointer; font-size: 14px; padding: 0 4px;
+  }
+
+  .canvas-wrap { flex: 1; position: relative; overflow: hidden; }
+  canvas { display: block; cursor: crosshair; }
+
+  .info-bar {
+    position: absolute; bottom: 8px; left: 8px; background: rgba(15,52,96,0.9);
+    padding: 6px 12px; border-radius: 4px; font-size: 12px; color: #a0a0b0;
+    pointer-events: none;
+  }
+
+  .toolbar { position: absolute; top: 8px; left: 8px; display: flex; gap: 6px; }
+  .toolbar button { font-size: 12px; padding: 5px 10px; }
+  .toolbar button.active { background: #e94560; }
+
+  .hint { font-size: 11px; color: #606080; line-height: 1.5; }
+  .hint kbd { background: #0f3460; padding: 1px 5px; border-radius: 3px; border: 1px solid #1a4080; font-size: 10px; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>矢量画布</h2>
+  <p class="hint">
+    点击添加尖点锚点。<br>
+    拖拽锚点移动，拖拽手柄调整曲线。<br>
+    <kbd>Ctrl</kbd>+拖拽锚点：转为平滑并拉出手柄。<br>
+    <kbd>Ctrl</kbd>+拖拽手柄(平滑)：断开对称，转为转角。<br>
+    双击锚点：转为尖点并清除手柄。<br>
+    双击手柄(转角)：对齐另一手柄，转为平滑。<br>
+    双击线段：转曲线。
+  </p>
+
+  <h3>操作</h3>
+  <div class="btn-row">
+    <button class="secondary" onclick="clearAll()">清空画布</button>
+    <button class="secondary" onclick="undoAction()">撤销</button>
+    <button class="secondary" onclick="closePath()">闭合路径</button>
+    <button class="secondary" onclick="dumpDebug()">Debug</button>
+  </div>
+
+  <h3>绘制圆形</h3>
+  <div class="input-row">
+    <label>半径</label><input type="number" id="circleRadius" value="200" min="1" max="5000">
+    <button onclick="drawCircle()">绘制</button>
+  </div>
+
+  <h3>锚点列表</h3>
+  <div class="point-list" id="pointList"></div>
+
+  <h3>Target 数据</h3>
+  <textarea id="targetInput" rows="4" style="width:100%;background:#0f3460;border:1px solid #1a4080;border-radius:4px;color:#e0e0e0;font-size:11px;padding:6px;resize:vertical;font-family:monospace;" placeholder="粘贴 Target 数据..."></textarea>
+  <div class="btn-row" style="margin-top:6px;">
+    <button class="secondary" onclick="importTarget()">导入</button>
+  </div>
+  <div id="targetInfo" style="font-size:11px;color:#808090;margin-top:4px;"></div>
+
+  <h3>Target 输出</h3>
+  <textarea id="targetOutput" rows="4" readonly style="width:100%;background:#0f3460;border:1px solid #1a4080;border-radius:4px;color:#e0e0e0;font-size:11px;padding:6px;resize:vertical;font-family:monospace;"></textarea>
+  <div class="btn-row" style="margin-top:6px;">
+    <button class="secondary" onclick="exportTarget()">导出</button>
+    <button class="secondary" onclick="copyOutput()">复制</button>
+  </div>
+
+  <h3>Debug 输出</h3>
+  <div class="point-list" id="debugOutput" style="white-space:pre-wrap; font-family:monospace; min-height:60px;">点击 Debug 按钮输出数据</div>
+</div>
+
+<div class="canvas-wrap">
+  <div class="toolbar">
+    <button onclick="toggleGrid()" id="btnGrid">网格</button>
+    <button onclick="toggleHandles()" id="btnHandles" class="active">手柄</button>
+    <button onclick="toggleTarget()" id="btnTarget" class="active">Target</button>
+    <select id="zoomSelect" onchange="setZoom(this.value)">
+      <option value="0.5">50%</option>
+      <option value="0.8" selected>80%</option>
+      <option value="1">100%</option>
+    </select>
+    <input type="number" id="zoomInput" placeholder="自定义%" min="20" max="2000" style="width:60px;padding:4px 6px;background:#0f3460;border:1px solid #1a4080;border-radius:4px;color:#e0e0e0;font-size:12px;" onkeydown="if(event.key==='Enter')setZoomCustom(this.value)">
+    <span id="rotationDisplay" style="font-size:12px;color:#a0a0b0;padding:0 4px;">0°</span>
+  </div>
+  <canvas id="canvas"></canvas>
+  <div class="info-bar" id="infoBar">坐标: 0, 0</div>
+</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const infoBar = document.getElementById('infoBar');
+const pointListEl = document.getElementById('pointList');
+
+let points = [];
+let closed = false;
+let history = [];
+let showGrid = true;
+let showHandles = true;
+let showTarget = true;
+let selectedIdx = -1;
+let dragging = null;
+let targetData = [];
+let viewX = 0, viewY = 0, zoom = 0.8;
+let pathRotation = 0;
+const FRAME_W = 1920, FRAME_H = 1080;
+
+const POINT_R = 5;
+const HANDLE_R = 4;
+const GRID = 20;
+const COL = {
+  anchor: '#e94560',
+  anchorSel: '#ff6b81',
+  handleIn: '#ff9800',
+  handleInLine: 'rgba(255,152,0,0.4)',
+  handleOut: '#00d2ff',
+  handleOutLine: 'rgba(0,210,255,0.4)',
+  path: '#e94560',
+  pathCurve: '#ff6b81',
+  grid: 'rgba(255,255,255,0.05)',
+  gridMajor: 'rgba(255,255,255,0.1)',
+  target: 'rgba(0,255,136,0.4)',
+  targetStroke: 'rgba(0,255,136,0.8)',
+};
+
+function resize() {
+  const w = canvas.parentElement;
+  canvas.width = w.clientWidth;
+  canvas.height = w.clientHeight;
+  centerFrame();
+  render();
+}
+window.addEventListener('resize', resize);
+
+function centerFrame() {
+  viewX = (canvas.width - FRAME_W * zoom) / 2;
+  viewY = (canvas.height - FRAME_H * zoom) / 2;
+}
+
+function screenToWorld(sx, sy) {
+  return { x: (sx - viewX) / zoom, y: (sy - viewY) / zoom };
+}
+function worldToScreen(wx, wy) {
+  return { x: wx * zoom + viewX, y: wy * zoom + viewY };
+}
+
+function setZoom(val) {
+  const z = parseFloat(val);
+  if (!z || z < 0.2 || z > 20) return;
+  const cx = canvas.width / 2, cy = canvas.height / 2;
+  const w = screenToWorld(cx, cy);
+  zoom = z;
+  viewX = cx - w.x * zoom;
+  viewY = cy - w.y * zoom;
+  document.getElementById('zoomSelect').value = val;
+  render();
+}
+function setZoomCustom(val) {
+  const z = parseFloat(val) / 100;
+  if (!z || z < 0.2 || z > 20) return;
+  setZoom(z);
+}
+
+function toggleTarget() {
+  showTarget = !showTarget;
+  document.getElementById('btnTarget').classList.toggle('active', showTarget);
+  render();
+}
+
+function parseTargetData(text) {
+  const results = [];
+  const lines = text.split('\n');
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const match = trimmed.match(/Target\s*\{([^}]+)\}/);
+    if (!match) continue;
+    const nums = match[1].trim().split(/\s+/).map(Number);
+    if (nums.length >= 8 && !isNaN(nums[0]) && !isNaN(nums[nums.length - 6]) && !isNaN(nums[nums.length - 5])) {
+      results.push({ tick: nums[0], x: nums[nums.length - 6], y: nums[nums.length - 5] });
+    }
+  }
+  return results;
+}
+
+function importTarget() {
+  const text = document.getElementById('targetInput').value;
+  targetData = parseTargetData(text);
+  const info = document.getElementById('targetInfo');
+  if (targetData.length > 0) {
+    const t0 = targetData[0].tick, t1 = targetData[targetData.length - 1].tick;
+    info.textContent = `${targetData.length} 个点, tick: ${t0} ~ ${t1}`;
+  } else {
+    info.textContent = '未解析到数据';
+  }
+  render();
+}
+
+function exportTarget() {
+  const n = points.length;
+  if (n < 2 || targetData.length === 0) return;
+  const count = closed ? n : n - 1;
+
+  const segTables = [];
+  for (let i = 0; i < count; i++) {
+    const a = points[i], b = points[(i + 1) % n];
+    const cp1 = a.hOut || a, cp2 = b.hIn || b;
+    segTables.push(buildArcTable(a, cp1, cp2, b));
+  }
+
+  const t0 = targetData[0].tick;
+  const positions = [];
+  let prevPt = null, prevSeg = 0, prevT = 0;
+
+  for (let idx = 0; idx < targetData.length; idx++) {
+    const tickDelta = targetData[idx].tick - t0;
+    if (idx === 0) {
+      const pos = findPosByTick(segTables, count, tickDelta);
+      positions.push(pos);
+      prevSeg = pos.seg; prevT = pos.t;
+      prevPt = { x: pos.x, y: pos.y };
+    } else {
+      const dist = getPointTickScale(0);
+      const pos = findPointAtDistance(segTables, count, prevPt, dist, prevSeg, prevT);
+      positions.push(pos);
+      prevSeg = pos.seg; prevT = pos.t;
+      prevPt = { x: pos.x, y: pos.y };
+    }
+  }
+
+  const inputText = document.getElementById('targetInput').value;
+  const lines = inputText.split('\n');
+  let tIdx = 0;
+  const outputLines = lines.map(line => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) return line;
+    const match = trimmed.match(/Target\s*\{([^}]+)\}/);
+    if (!match || tIdx >= positions.length) return line;
+    const nums = match[1].trim().split(/\s+/);
+    nums[nums.length - 6] = positions[tIdx].x.toFixed(2);
+    nums[nums.length - 5] = positions[tIdx].y.toFixed(2);
+    tIdx++;
+    return `Target { ${nums.join(' ')} };`;
+  });
+
+  document.getElementById('targetOutput').value = outputLines.join('\n');
+}
+
+function copyOutput() {
+  const el = document.getElementById('targetOutput');
+  el.select();
+  navigator.clipboard.writeText(el.value);
+}
+
+function drawCircle() {
+  const r = parseFloat(document.getElementById('circleRadius').value) || 200;
+  const n = 12;
+  const cx = 960, cy = 540;
+  const kappa = 4 / 3 * Math.tan(Math.PI / (2 * n));
+
+  saveHistory();
+  points = [];
+  closed = true;
+
+  for (let i = 0; i < n; i++) {
+    const angle = (2 * Math.PI * i) / n;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+
+    const hOutAngle = angle + Math.PI / 2;
+    const hInAngle = angle - Math.PI / 2;
+    const hLen = r * kappa;
+
+    points.push({
+      x, y,
+      hOut: { x: x + hLen * Math.cos(hOutAngle), y: y + hLen * Math.sin(hOutAngle) },
+      hIn: { x: x + hLen * Math.cos(hInAngle), y: y + hLen * Math.sin(hInAngle) },
+      type: 'smooth',
+      tickScale: 96,
+    });
+  }
+
+  selectedIdx = -1;
+  updateList();
+  render();
+}
+
+function getPointTickScale(idx) {
+  return points[idx] && points[idx].tickScale ? points[idx].tickScale : 96;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undoAction(); }
+});
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  if (e.shiftKey) {
+    const step = 5 * Math.PI / 180;
+    const angle = e.deltaY < 0 ? step : -step;
+    rotatePath(angle);
+    pathRotation += angle;
+    document.getElementById('rotationDisplay').textContent = `${(pathRotation * 180 / Math.PI).toFixed(1)}°`;
+  } else {
+    const factor = e.deltaY < 0 ? 1.1 : 0.9;
+    const cx = canvas.width / 2, cy = canvas.height / 2;
+    const w = screenToWorld(cx, cy);
+    zoom *= factor;
+    zoom = Math.max(0.2, Math.min(20, zoom));
+    viewX = cx - w.x * zoom;
+    viewY = cy - w.y * zoom;
+  }
+  render();
+}, { passive: false });
+
+function rotatePath(angle) {
+  if (points.length === 0) return;
+  saveHistory();
+  let cx = 0, cy = 0;
+  points.forEach(p => { cx += p.x; cy += p.y; });
+  cx /= points.length;
+  cy /= points.length;
+
+  const cos = Math.cos(angle), sin = Math.sin(angle);
+  points.forEach(p => {
+    const dx = p.x - cx, dy = p.y - cy;
+    p.x = cx + dx * cos - dy * sin;
+    p.y = cy + dx * sin + dy * cos;
+    if (p.hIn) {
+      const hdx = p.hIn.x - cx, hdy = p.hIn.y - cy;
+      p.hIn.x = cx + hdx * cos - hdy * sin;
+      p.hIn.y = cy + hdx * sin + hdy * cos;
+    }
+    if (p.hOut) {
+      const hdx = p.hOut.x - cx, hdy = p.hOut.y - cy;
+      p.hOut.x = cx + hdx * cos - hdy * sin;
+      p.hOut.y = cy + hdx * sin + hdy * cos;
+    }
+  });
+  updateList();
+  render();
+}
+
+function cloneState() {
+  return points.map(p => ({
+    x: p.x, y: p.y,
+    hIn: p.hIn ? { ...p.hIn } : null,
+    hOut: p.hOut ? { ...p.hOut } : null,
+    type: p.type,
+    tickScale: p.tickScale || 96,
+  }));
+}
+
+function saveHistory() {
+  history.push({ points: cloneState(), closed });
+  if (history.length > 60) history.shift();
+}
+
+function undoAction() {
+  if (!history.length) return;
+  const prev = history.pop();
+  points = prev.points;
+  closed = prev.closed;
+  selectedIdx = -1;
+  updateList();
+  render();
+}
+
+
+function deletePoint(idx) {
+  if (!points.length) return;
+  saveHistory();
+  points.splice(idx, 1);
+  if (selectedIdx >= points.length) selectedIdx = points.length - 1;
+  updateList();
+  render();
+}
+
+function clearAll() {
+  saveHistory();
+  points = [];
+  closed = false;
+  selectedIdx = -1;
+  updateList();
+  render();
+}
+
+function closePath() {
+  if (points.length < 2) return;
+  saveHistory();
+  closed = !closed;
+  updateList();
+  render();
+}
+
+function toggleGrid() {
+  showGrid = !showGrid;
+  document.getElementById('btnGrid').classList.toggle('active', showGrid);
+  render();
+}
+
+function toggleHandles() {
+  showHandles = !showHandles;
+  document.getElementById('btnHandles').classList.toggle('active', showHandles);
+  render();
+}
+
+function updateList() {
+  pointListEl.innerHTML = '';
+  points.forEach((p, i) => {
+    const d = document.createElement('div');
+    d.className = 'point-item' + (i === selectedIdx ? ' selected' : '');
+    const label = p.type === 'smooth' ? '平滑' : (p.type === 'corner' ? '转角' : '尖点');
+    const ts = p.tickScale || 96;
+    d.innerHTML = `
+      <span class="coords">P${i}: (${Math.round(p.x)}, ${Math.round(p.y)})</span>
+      <span class="type">${label}</span>
+      <input type="number" value="${ts}" min="1" max="9600" style="width:45px;padding:2px 4px;background:#0f3460;border:1px solid #1a4080;border-radius:3px;color:#e0e0e0;font-size:10px;text-align:center;" onchange="points[${i}].tickScale=Number(this.value);render()" onclick="event.stopPropagation()">
+      <span class="delete-btn" onclick="event.stopPropagation();deletePoint(${i})">×</span>
+    `;
+    d.onclick = () => { selectedIdx = i; updateList(); render(); };
+    pointListEl.appendChild(d);
+  });
+}
+
+// --- Hit test ---
+function hitAnchor(mx, my) {
+  const threshold = (POINT_R + 5) / zoom;
+  for (let i = points.length - 1; i >= 0; i--) {
+    if (Math.hypot(points[i].x - mx, points[i].y - my) < threshold) return i;
+  }
+  return -1;
+}
+
+function hitHandleResult(mx, my) {
+  const threshold = (HANDLE_R + 5) / zoom;
+  for (let i = 0; i < points.length; i++) {
+    const p = points[i];
+    if (p.type === 'plain') continue;
+    if (p.hIn && Math.hypot(p.hIn.x - mx, p.hIn.y - my) < threshold)
+      return { idx: i, type: 'in' };
+    if (p.hOut && Math.hypot(p.hOut.x - mx, p.hOut.y - my) < threshold)
+      return { idx: i, type: 'out' };
+  }
+  return null;
+}
+
+function hitSegment(mx, my) {
+  const n = points.length;
+  const count = closed ? n : n - 1;
+  for (let i = 0; i < count; i++) {
+    const a = points[i], b = points[(i + 1) % n];
+    const cp1 = a.hOut || a, cp2 = b.hIn || b;
+    const isCurve = a.hOut || b.hIn;
+    if (isCurve) {
+      if (distToCubic(mx, my, a, cp1, cp2, b) < 10) return i;
+    } else {
+      if (distToSeg(mx, my, a.x, a.y, b.x, b.y) < 8) return i;
+    }
+  }
+  return -1;
+}
+
+function distToSeg(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1, len2 = dx * dx + dy * dy;
+  if (!len2) return Math.hypot(px - x1, py - y1);
+  const t = Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / len2));
+  return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+}
+
+function distToCubic(px, py, p0, p1, p2, p3) {
+  let min = Infinity;
+  for (let t = 0; t <= 1; t += 0.015) {
+    const mt = 1 - t;
+    const x = mt*mt*mt*p0.x + 3*mt*mt*t*p1.x + 3*mt*t*t*p2.x + t*t*t*p3.x;
+    const y = mt*mt*mt*p0.y + 3*mt*mt*t*p1.y + 3*mt*t*t*p2.y + t*t*t*p3.y;
+    min = Math.min(min, Math.hypot(px - x, py - y));
+  }
+  return min;
+}
+
+// --- Mouse ---
+let lastMousedownTime = 0;
+let mousedownMoved = false;
+
+canvas.addEventListener('mousedown', e => {
+  const r = canvas.getBoundingClientRect();
+  const sx = e.clientX - r.left, sy = e.clientY - r.top;
+  const { x: mx, y: my } = screenToWorld(sx, sy);
+  lastMousedownTime = Date.now();
+  mousedownMoved = false;
+
+  if (e.shiftKey && !hitHandleResult(mx, my) && hitAnchor(mx, my) < 0) {
+    saveHistory();
+    dragging = { type: 'pathMove', startMx: mx, startMy: my };
+    return;
+  }
+
+  const hh = hitHandleResult(mx, my);
+  if (hh) {
+    dragging = { type: 'handle', idx: hh.idx, side: hh.type, ctrl: e.ctrlKey };
+    saveHistory();
+    return;
+  }
+
+  const ai = hitAnchor(mx, my);
+  if (ai >= 0) {
+    const ap = points[ai];
+    if (e.ctrlKey) {
+      saveHistory();
+      ap.type = 'smooth';
+      ap.hIn = null;
+      ap.hOut = null;
+      dragging = { type: 'newOut', idx: ai, start: { x: mx, y: my } };
+    } else if (ap.type !== 'plain' && !ap.hIn && !ap.hOut) {
+      saveHistory();
+      dragging = { type: 'newOut', idx: ai, start: { x: mx, y: my } };
+    } else {
+      dragging = { type: 'anchor', idx: ai, ox: ap.x - mx, oy: ap.y - my };
+    }
+    selectedIdx = ai;
+    updateList();
+    render();
+    return;
+  }
+
+  if (e.ctrlKey) return;
+
+  saveHistory();
+  points.push({ x: mx, y: my, hIn: null, hOut: null, type: 'plain', tickScale: 96 });
+  selectedIdx = points.length - 1;
+  dragging = { type: 'anchor', idx: selectedIdx, ox: 0, oy: 0 };
+  updateList();
+  render();
+});
+
+canvas.addEventListener('mousemove', e => {
+  const r = canvas.getBoundingClientRect();
+  const sx = e.clientX - r.left, sy = e.clientY - r.top;
+  const { x: mx, y: my } = screenToWorld(sx, sy);
+  infoBar.textContent = `坐标: ${Math.round(mx)}, ${Math.round(my)}  缩放: ${(zoom * 100).toFixed(0)}%`;
+
+  if (!dragging) return;
+  mousedownMoved = true;
+
+  if (dragging.type === 'anchor') {
+    const p = points[dragging.idx];
+    const nx = mx + dragging.ox, ny = my + dragging.oy;
+    const dx = nx - p.x, dy = ny - p.y;
+    p.x = nx; p.y = ny;
+    if (p.hIn) { p.hIn.x += dx; p.hIn.y += dy; }
+    if (p.hOut) { p.hOut.x += dx; p.hOut.y += dy; }
+
+  } else if (dragging.type === 'handle') {
+    const p = points[dragging.idx];
+    if (dragging.ctrl && p.type === 'smooth') {
+      p.type = 'corner';
+    }
+    if (dragging.side === 'in') {
+      p.hIn = { x: mx, y: my };
+      if (p.type === 'smooth' && p.hOut) {
+        const dx = mx - p.x, dy = my - p.y;
+        const len = Math.hypot(p.hOut.x - p.x, p.hOut.y - p.y);
+        const d = Math.hypot(dx, dy);
+        if (d > 0) p.hOut = { x: p.x - dx / d * len, y: p.y - dy / d * len };
+      }
+    } else {
+      p.hOut = { x: mx, y: my };
+      if (p.type === 'smooth' && p.hIn) {
+        const dx = mx - p.x, dy = my - p.y;
+        const len = Math.hypot(p.hIn.x - p.x, p.hIn.y - p.y);
+        const d = Math.hypot(dx, dy);
+        if (d > 0) p.hIn = { x: p.x - dx / d * len, y: p.y - dy / d * len };
+      }
+    }
+
+  } else if (dragging.type === 'newOut') {
+    const p = points[dragging.idx];
+    if (Math.hypot(mx - dragging.start.x, my - dragging.start.y) > 5) {
+      p.hOut = { x: mx, y: my };
+      p.hIn = { x: 2 * p.x - mx, y: 2 * p.y - my };
+      p.type = 'smooth';
+    }
+  } else if (dragging.type === 'pathMove') {
+    const dx = mx - dragging.startMx;
+    const dy = my - dragging.startMy;
+    points.forEach(p => {
+      p.x += dx; p.y += dy;
+      if (p.hIn) { p.hIn.x += dx; p.hIn.y += dy; }
+      if (p.hOut) { p.hOut.x += dx; p.hOut.y += dy; }
+    });
+    dragging.startMx = mx;
+    dragging.startMy = my;
+  }
+
+  render();
+});
+
+canvas.addEventListener('mouseup', () => {
+  dragging = null;
+  updateList();
+  render();
+});
+
+canvas.addEventListener('mouseleave', () => { dragging = null; });
+
+canvas.addEventListener('dblclick', e => {
+  if (mousedownMoved) return;
+  const r = canvas.getBoundingClientRect();
+  const { x: mx, y: my } = screenToWorld(e.clientX - r.left, e.clientY - r.top);
+
+  const hh = hitHandleResult(mx, my);
+  if (hh) {
+    const p = points[hh.idx];
+    if (p.type === 'corner') {
+      saveHistory();
+      const clicked = hh.side === 'in' ? p.hIn : p.hOut;
+      const toMove = hh.side === 'in' ? p.hOut : p.hIn;
+      const key = hh.side === 'in' ? 'hOut' : 'hIn';
+      if (clicked && toMove) {
+        const dx = clicked.x - p.x, dy = clicked.y - p.y;
+        const len = Math.hypot(toMove.x - p.x, toMove.y - p.y);
+        const d = Math.hypot(dx, dy);
+        if (d > 0) {
+          p[key] = { x: p.x - dx / d * len, y: p.y - dy / d * len };
+        }
+      }
+      p.type = 'smooth';
+      updateList();
+      render();
+    }
+    return;
+  }
+
+  const ai = hitAnchor(mx, my);
+  if (ai >= 0) {
+    saveHistory();
+    const p = points[ai];
+    p.type = 'plain';
+    p.hIn = null;
+    p.hOut = null;
+    updateList();
+    render();
+    return;
+  }
+
+  const si = hitSegment(mx, my);
+  if (si >= 0) {
+    const n = points.length;
+    const a = points[si], b = points[(si + 1) % n];
+    if (!a.hOut && !b.hIn) {
+      saveHistory();
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const offX = -dy * 0.3, offY = dx * 0.3;
+      a.hOut = { x: a.x + dx / 3 + offX, y: a.y + dy / 3 + offY };
+      a.hIn = { x: 2 * a.x - a.hOut.x, y: 2 * a.y - a.hOut.y };
+      b.hIn = { x: a.x + dx * 2 / 3 + offX, y: a.y + dy * 2 / 3 + offY };
+      b.hOut = { x: 2 * b.x - b.hIn.x, y: 2 * b.y - b.hIn.y };
+      a.type = 'smooth';
+      b.type = 'smooth';
+      updateList();
+      render();
+    }
+  }
+});
+
+// --- Render ---
+function render() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save();
+  ctx.translate(viewX, viewY);
+  ctx.scale(zoom, zoom);
+
+  drawFrame();
+  if (showGrid) drawGrid();
+  drawPath();
+  if (showTarget && targetData.length > 0) drawTargetPoints();
+  if (showHandles) drawHandleLines();
+  if (showHandles) drawHandles();
+  drawAnchors();
+
+  ctx.restore();
+}
+
+function drawFrame() {
+  ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+  ctx.lineWidth = 2 / zoom;
+  ctx.strokeRect(0, 0, FRAME_W, FRAME_H);
+  ctx.fillStyle = 'rgba(255,255,255,0.03)';
+  ctx.fillRect(0, 0, FRAME_W, FRAME_H);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.font = `${12 / zoom}px sans-serif`;
+  ctx.fillText(`${FRAME_W}×${FRAME_H}`, 4 / zoom, -6 / zoom);
+}
+
+function drawGrid() {
+  const step = GRID;
+  ctx.lineWidth = 1 / zoom;
+  for (let x = 0; x <= FRAME_W; x += step) {
+    ctx.strokeStyle = x % (step * 5) === 0 ? COL.gridMajor : COL.grid;
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, FRAME_H); ctx.stroke();
+  }
+  for (let y = 0; y <= FRAME_H; y += step) {
+    ctx.strokeStyle = y % (step * 5) === 0 ? COL.gridMajor : COL.grid;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(FRAME_W, y); ctx.stroke();
+  }
+}
+
+function drawPath() {
+  const n = points.length;
+  if (n < 2) return;
+  const count = closed ? n : n - 1;
+
+  ctx.lineWidth = 2 / zoom;
+  ctx.strokeStyle = COL.path;
+
+  for (let i = 0; i < count; i++) {
+    const a = points[i], b = points[(i + 1) % n];
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    if (a.hOut || b.hIn) {
+      const cp1 = a.hOut || a;
+      const cp2 = b.hIn || b;
+      ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, b.x, b.y);
+    } else {
+      ctx.lineTo(b.x, b.y);
+    }
+    ctx.stroke();
+  }
+}
+
+function drawTargetPoints() {
+  const n = points.length;
+  if (n < 2 || targetData.length === 0) return;
+  const count = closed ? n : n - 1;
+
+  const segTables = [];
+  for (let i = 0; i < count; i++) {
+    const a = points[i], b = points[(i + 1) % n];
+    const cp1 = a.hOut || a, cp2 = b.hIn || b;
+    segTables.push(buildArcTable(a, cp1, cp2, b));
+  }
+
+  const t0 = targetData[0].tick;
+  const r = 48;
+  ctx.lineWidth = 2 / zoom;
+  ctx.fillStyle = COL.target;
+  ctx.strokeStyle = COL.targetStroke;
+
+  let prevPt = null;
+  let prevSeg = 0;
+  let prevT = 0;
+
+  for (let idx = 0; idx < targetData.length; idx++) {
+    const td = targetData[idx];
+    const tickDelta = td.tick - t0;
+    let px, py;
+
+    if (idx === 0) {
+      const pos = findPosByTick(segTables, count, tickDelta);
+      px = pos.x; py = pos.y;
+      prevSeg = pos.seg;
+      prevT = pos.t;
+    } else {
+      const dist = getPointTickScale(0);
+      const pos = findPointAtDistance(segTables, count, prevPt, dist, prevSeg, prevT);
+      px = pos.x; py = pos.y;
+      prevSeg = pos.seg;
+      prevT = pos.t;
+    }
+
+    prevPt = { x: px, y: py };
+    ctx.beginPath();
+    ctx.arc(px, py, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+}
+
+function findPosByTick(segTables, count, tickDelta) {
+  let accTicks = 0;
+  for (let i = 0; i < count; i++) {
+    const table = segTables[i];
+    const segLen = table[table.length - 1].len;
+    const segTicks = segLen / (getPointTickScale(i) / 24);
+    if (tickDelta <= accTicks + segTicks || i === count - 1) {
+      const localTick = tickDelta - accTicks;
+      const targetLen = localTick * (getPointTickScale(i) / 24);
+      const t = arcLenToT(table, targetLen);
+      const a = points[i], b = points[(i + 1) % points.length];
+      const cp1 = a.hOut || a, cp2 = b.hIn || b;
+      const pt = evalCurve(a, cp1, cp2, b, t);
+      return { x: pt.x, y: pt.y, seg: i, t };
+    }
+    accTicks += segTicks;
+  }
+  const last = points[(count) % points.length];
+  return { x: last.x, y: last.y, seg: count - 1, t: 1 };
+}
+
+function findPointAtDistance(segTables, count, fromPt, targetDist, startSeg, startT) {
+  const N = 100;
+  for (let i = startSeg; i < count; i++) {
+    const a = points[i], b = points[(i + 1) % points.length];
+    const cp1 = a.hOut || a, cp2 = b.hIn || b;
+    const startJ = (i === startSeg) ? Math.floor(startT * N) : 0;
+    for (let j = startJ; j <= N; j++) {
+      const t = j / N;
+      const pt = evalCurve(a, cp1, cp2, b, t);
+      const d = Math.hypot(pt.x - fromPt.x, pt.y - fromPt.y);
+      if (d >= targetDist) {
+        let lo = (j - 1) / N, hi = t;
+        if (j === startJ && i === startSeg) lo = startT;
+        for (let k = 0; k < 10; k++) {
+          const mid = (lo + hi) / 2;
+          const midPt = evalCurve(a, cp1, cp2, b, mid);
+          const midD = Math.hypot(midPt.x - fromPt.x, midPt.y - fromPt.y);
+          if (midD < targetDist) lo = mid; else hi = mid;
+        }
+        const finalT = (lo + hi) / 2;
+        const finalPt = evalCurve(a, cp1, cp2, b, finalT);
+        return { x: finalPt.x, y: finalPt.y, seg: i, t: finalT };
+      }
+    }
+  }
+  const last = points[(count) % points.length];
+  return { x: last.x, y: last.y, seg: count - 1, t: 1 };
+}
+
+function buildArcTable(p0, p1, p2, p3) {
+  const N = 100;
+  const table = [{ t: 0, len: 0 }];
+  let prev = p0;
+  let cumLen = 0;
+  for (let i = 1; i <= N; i++) {
+    const t = i / N;
+    const cur = evalCurve(p0, p1, p2, p3, t);
+    cumLen += Math.hypot(cur.x - prev.x, cur.y - prev.y);
+    table.push({ t, len: cumLen });
+    prev = cur;
+  }
+  return table;
+}
+
+function arcLenToT(table, targetLen) {
+  if (targetLen <= 0) return 0;
+  const totalLen = table[table.length - 1].len;
+  if (targetLen >= totalLen) return 1;
+
+  for (let i = 1; i < table.length; i++) {
+    if (table[i].len >= targetLen) {
+      const prev = table[i - 1];
+      const cur = table[i];
+      const frac = (targetLen - prev.len) / (cur.len - prev.len);
+      return prev.t + frac * (cur.t - prev.t);
+    }
+  }
+  return 1;
+}
+
+function evalCurve(p0, p1, p2, p3, t) {
+  const mt = 1 - t;
+  return {
+    x: mt*mt*mt*p0.x + 3*mt*mt*t*p1.x + 3*mt*t*t*p2.x + t*t*t*p3.x,
+    y: mt*mt*mt*p0.y + 3*mt*mt*t*p1.y + 3*mt*t*t*p2.y + t*t*t*p3.y,
+  };
+}
+
+function drawHandleLines() {
+  ctx.lineWidth = 1 / zoom;
+  points.forEach(p => {
+    if (p.type === 'plain') return;
+    if (p.hIn) {
+      ctx.setLineDash([4 / zoom, 4 / zoom]);
+      ctx.strokeStyle = COL.handleInLine;
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.hIn.x, p.hIn.y); ctx.stroke();
+    }
+    if (p.hOut) {
+      ctx.setLineDash([4 / zoom, 4 / zoom]);
+      ctx.strokeStyle = COL.handleOutLine;
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.hOut.x, p.hOut.y); ctx.stroke();
+    }
+  });
+  ctx.setLineDash([]);
+}
+
+function drawHandles() {
+  const hr = HANDLE_R / zoom;
+  const lw = 1 / zoom;
+  points.forEach(p => {
+    if (p.type === 'plain') return;
+    if (p.hIn) {
+      ctx.beginPath();
+      ctx.arc(p.hIn.x, p.hIn.y, hr, 0, Math.PI * 2);
+      ctx.fillStyle = COL.handleIn;
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = lw;
+      ctx.stroke();
+    }
+    if (p.hOut) {
+      ctx.beginPath();
+      ctx.arc(p.hOut.x, p.hOut.y, hr, 0, Math.PI * 2);
+      ctx.fillStyle = COL.handleOut;
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = lw;
+      ctx.stroke();
+    }
+  });
+  ctx.setLineDash([]);
+}
+
+function drawHandles() {
+  const hr = HANDLE_R / zoom;
+  const lw = 1 / zoom;
+  points.forEach(p => {
+    if (p.type === 'plain') return;
+    [p.hIn, p.hOut].forEach(h => {
+      if (!h) return;
+      ctx.beginPath();
+      ctx.arc(h.x, h.y, hr, 0, Math.PI * 2);
+      ctx.fillStyle = COL.handle;
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = lw;
+      ctx.stroke();
+    });
+  });
+}
+
+function drawAnchors() {
+  const pr = POINT_R / zoom;
+  const lw = 1.5 / zoom;
+  const fontSize = 10 / zoom;
+  points.forEach((p, i) => {
+    const sel = i === selectedIdx;
+    ctx.beginPath();
+    if (p.type === 'smooth') {
+      ctx.arc(p.x, p.y, pr, 0, Math.PI * 2);
+    } else if (p.type === 'corner') {
+      ctx.moveTo(p.x, p.y - pr);
+      ctx.lineTo(p.x + pr, p.y);
+      ctx.lineTo(p.x, p.y + pr);
+      ctx.lineTo(p.x - pr, p.y);
+      ctx.closePath();
+    } else {
+      ctx.rect(p.x - pr, p.y - pr, pr * 2, pr * 2);
+    }
+    ctx.fillStyle = sel ? COL.anchorSel : COL.anchor;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = lw;
+    ctx.stroke();
+
+    ctx.fillStyle = '#707090';
+    ctx.font = `${fontSize}px sans-serif`;
+    ctx.fillText(`P${i}`, p.x + 8 / zoom, p.y - 8 / zoom);
+  });
+}
+
+
+function dumpDebug() {
+  const n = points.length;
+  const count = closed ? n : n - 1;
+  const lines = [];
+
+  lines.push(`锚点数: ${n}, 闭合: ${closed}`);
+  lines.push('');
+
+  points.forEach((p, i) => {
+    lines.push(`P${i} ${p.type} (${p.x.toFixed(1)}, ${p.y.toFixed(1)}) tickScale:${p.tickScale || 96}`);
+    if (p.hIn)  lines.push(`  hIn:  (${p.hIn.x.toFixed(1)}, ${p.hIn.y.toFixed(1)})`);
+    if (p.hOut) lines.push(`  hOut: (${p.hOut.x.toFixed(1)}, ${p.hOut.y.toFixed(1)})`);
+  });
+
+  lines.push('');
+  for (let i = 0; i < count; i++) {
+    const a = points[i], b = points[(i + 1) % n];
+    const isCurve = a.hOut || b.hIn;
+    if (isCurve) {
+      const c1 = a.hOut || a, c2 = b.hIn || b;
+      lines.push(`Seg ${i}: C (${c1.x.toFixed(1)},${c1.y.toFixed(1)}) (${c2.x.toFixed(1)},${c2.y.toFixed(1)}) (${b.x.toFixed(1)},${b.y.toFixed(1)})`);
+    } else {
+      lines.push(`Seg ${i}: L (${b.x.toFixed(1)},${b.y.toFixed(1)})`);
+    }
+  }
+
+  const svgPath = buildSVGPathD();
+  lines.push('');
+  lines.push('SVG path d:');
+  lines.push(svgPath);
+
+  if (targetData.length > 0 && n >= 2) {
+    lines.push('');
+    lines.push(`Target 点 (${targetData.length} 个):`);
+    const segTables = [];
+    for (let i = 0; i < count; i++) {
+      const a = points[i], b = points[(i + 1) % n];
+      const cp1 = a.hOut || a, cp2 = b.hIn || b;
+      segTables.push(buildArcTable(a, cp1, cp2, b));
+    }
+    const t0 = targetData[0].tick;
+
+    let prevPt = null;
+    let prevSeg = 0;
+    let prevT = 0;
+
+    targetData.forEach((td, idx) => {
+      const tickDelta = td.tick - t0;
+      let px, py;
+
+      if (idx === 0) {
+        const pos = findPosByTick(segTables, count, tickDelta);
+        px = pos.x; py = pos.y;
+        prevSeg = pos.seg;
+        prevT = pos.t;
+      } else {
+        const dist = getPointTickScale(0);
+        const pos = findPointAtDistance(segTables, count, prevPt, dist, prevSeg, prevT);
+        px = pos.x; py = pos.y;
+        prevSeg = pos.seg;
+        prevT = pos.t;
+      }
+
+      prevPt = { x: px, y: py };
+      lines.push(`  T${idx} tick:${td.tick} (${px.toFixed(1)}, ${py.toFixed(1)})`);
+    });
+  }
+
+  const el = document.getElementById('debugOutput');
+  el.textContent = lines.join('\n');
+  console.log('[Debug]', JSON.stringify({ points, closed }, null, 2));
+}
+
+function buildSVGPathD() {
+  if (!points.length) return '';
+  let d = '';
+  const n = points.length;
+  const count = closed ? n : n - 1;
+  points.forEach((p, i) => {
+    if (i === 0) d += `M ${p.x.toFixed(1)} ${p.y.toFixed(1)} `;
+    if (i >= count && !closed) return;
+    const b = points[(i + 1) % n];
+    if (p.hOut || b.hIn) {
+      const c1 = p.hOut || p, c2 = b.hIn || b;
+      d += `C ${c1.x.toFixed(1)} ${c1.y.toFixed(1)} ${c2.x.toFixed(1)} ${c2.y.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)} `;
+    } else {
+      d += `L ${b.x.toFixed(1)} ${b.y.toFixed(1)} `;
+    }
+  });
+  if (closed) d += 'Z';
+  return d.trim();
+}
+
+resize();
+</script>
+</body>
+</html>
