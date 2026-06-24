@@ -6,7 +6,7 @@ This guide will assume that you will be using Samyuu’s [Comfy Studio][comfy_sa
 
 If you have never used Comfy Studio before, make sure that you read the manual. This can be found under the **Help** tab inside Comfy Studio. The manual can answer a lot of common questions, such as how to place chain slides. However, the best way to learn how to use the software will always be to play around with it and discover things on your own.
 
-![Help→Open User Manual][comfy_help]
+![Comfy Studio Manual Location][comfy_help]
 
 If you’ve never charted before, it’s highly recommended that you look over the [Charting Guide (General Rules)][ac_rule] created by soobinpublic to learn a bit about how SEGA’s charts work, in particular the Arcade charts from *Hatsune Miku: Project DIVA Mega Mix+*. After playing around in Comfy for a bit, you should start studying SEGA’s latest charts (the ones with sliders) to get an understanding of common charting practices and patterns. If you would like to get help or receive feedback on your charts, check out the [#charting][pdmm_chart_channel] channel in the [Mega Mix+ Modding Discord][pdmm_discord]. I highly recommend asking feedback on your charts in a public forum so that your charts can be somewhat playable upon release.
 
@@ -22,4 +22,4 @@ If you’ve never charted before, it’s highly recommended that you look over t
 [ac_rule]:/ac_rule
 
 <!-- Image -->
-[comfy_help]:assets/image55.png
+[comfy_help]:https://i.imgur.com/f9qjgMW.png
