@@ -87,6 +87,23 @@
     font-size: 11px !important;
     min-width: 40px;
   }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #a0a0b0;
+    cursor: pointer;
+  }
+  .checkbox-row.checkbox-inline { margin-top: 0; flex-shrink: 0; }
+  .checkbox-row input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: #e94560;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -110,7 +127,13 @@
     <button data-i18n="draw" onclick="drawCircle()">绘制</button>
   </div>
 
-  <h3 data-i18n="targetData">Target 数据</h3>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+    <h3 data-i18n="targetData" style="margin:0;">Target 数据</h3>
+    <label class="checkbox-row checkbox-inline">
+      <input type="checkbox" id="auraCompat">
+      <span data-i18n="auraCompat">Aura分支</span>
+    </label>
+  </div>
   <textarea id="targetInput" class="target-textarea" rows="10" data-i18n-placeholder="targetPlaceholder" placeholder="粘贴 Target 数据..."></textarea>
   <div class="btn-row" style="margin-top:6px;">
     <button class="secondary" data-i18n="import" onclick="importTarget()">导入</button>
@@ -163,6 +186,7 @@ const I18N = {
     targetData: 'Target 数据',
     targetPlaceholder: '粘贴 Target 数据...',
     import: '导入',
+    auraCompat: 'Aura分支',
     targetOutput: 'Target 输出',
     export: '导出',
     copy: '复制',
@@ -194,6 +218,7 @@ const I18N = {
     targetData: 'Target Data',
     targetPlaceholder: 'Paste Target data...',
     import: 'Import',
+    auraCompat: 'Aura Fork',
     targetOutput: 'Target Output',
     export: 'Export',
     copy: 'Copy',
