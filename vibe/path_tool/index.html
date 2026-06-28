@@ -459,7 +459,7 @@ function exportTarget() {
   }
 
   const inputText = document.getElementById('targetInput').value;
-  const auraCompat = document.getElementById('auraCompat').value;
+  const auraCompat = document.getElementById('auraCompat').checked;
   const lines = inputText.split('\n');
   let tIdx = 0;
   const outputLines = lines.map(line => {
