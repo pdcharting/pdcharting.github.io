@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>comfy排版工具 vibe版</title>
+<title>Comfy排版工具 vibe版</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: "Microsoft YaHei", sans-serif; background: #1a1a2e; color: #e0e0e0; display: flex; height: 100vh; overflow: hidden; }
@@ -110,7 +110,7 @@
 
 <div class="sidebar sidebar-left">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-    <h2 data-i18n="appTitle">comfy排版工具</h2>
+    <h2 data-i18n="appTitle">Comfy排版工具</h2>
     <button class="secondary lang-toggle" id="btnLang" onclick="toggleLanguage()">EN</button>
   </div>
 
@@ -174,8 +174,8 @@ let lang = localStorage.getItem('lang') || 'zh';
 
 const I18N = {
   zh: {
-    title: 'comfy排版工具 vibe版',
-    appTitle: 'comfy排版工具',
+    title: 'Comfy排版工具 vibe版',
+    appTitle: 'Comfy排版工具',
     operations: '操作',
     clearCanvas: '清空画布',
     undo: '撤销',
@@ -206,8 +206,8 @@ const I18N = {
     hint: '点击添加尖点锚点。<br>拖拽锚点移动，拖拽手柄调整曲线。<br><kbd>Ctrl</kbd>+拖拽锚点：转为平滑并拉出手柄。<br><kbd>Ctrl</kbd>+拖拽手柄(平滑)：断开对称，转为转角。<br>双击锚点：转为尖点并清除手柄。<br>双击手柄(转角)：对齐另一手柄，转为平滑。<br>双击线段：转曲线。<br><kbd>Shift</kbd>+滚轮：旋转路径。<br>工具栏可输入缩放与旋转角度。',
   },
   en: {
-    title: 'comfy PathTool Vibe',
-    appTitle: 'comfy PathTool',
+    title: 'Comfy PathTool Vibe',
+    appTitle: 'Comfy PathTool',
     operations: 'Operations',
     clearCanvas: 'Clear',
     undo: 'Undo',
@@ -459,6 +459,7 @@ function exportTarget() {
   }
 
   const inputText = document.getElementById('targetInput').value;
+  const auraCompat = document.getElementById('auraCompat').value;
   const lines = inputText.split('\n');
   let tIdx = 0;
   const outputLines = lines.map(line => {
@@ -467,13 +468,25 @@ function exportTarget() {
     const match = trimmed.match(/Target\s*\{([^}]+)\}/);
     if (!match || tIdx >= positions.length) return line;
     const nums = match[1].trim().split(/\s+/);
-    nums[nums.length - 6] = positions[tIdx].x.toFixed(2);
-    nums[nums.length - 5] = positions[tIdx].y.toFixed(2);
-    if (nums.length > 2 && Number(nums[2]) === 0) nums[2] = '1';
-    if (nums.length > 1 && Number(nums[1]) === 0) {
-      nums[nums.length - 3] = '-2.00';
-      nums[nums.length - 2] = '500.00';
-      nums[nums.length - 1] = '1200.00';
+    if (auraCompat){
+      nums[nums.length - 5] = positions[tIdx].x.toFixed(2);
+      nums[nums.length - 4] = positions[tIdx].y.toFixed(2);
+      if (nums.length > 2 && Number(nums[2]) === 0) nums[2] = '1';
+      if (nums.length > 1 && Number(nums[1]) === 0) {
+        nums[nums.length - 2] = '-2.00';
+        nums[nums.length - 1] = '500.00';
+      }
+      nums.push('1200.00')
+    }
+    else{
+      nums[nums.length - 6] = positions[tIdx].x.toFixed(2);
+      nums[nums.length - 5] = positions[tIdx].y.toFixed(2);
+      if (nums.length > 2 && Number(nums[2]) === 0) nums[2] = '1';
+      if (nums.length > 1 && Number(nums[1]) === 0) {
+        nums[nums.length - 3] = '-2.00';
+        nums[nums.length - 2] = '500.00';
+        nums[nums.length - 1] = '1200.00';
+      }
     }
     tIdx++;
     return `Target { ${nums.join(' ')} };`;
