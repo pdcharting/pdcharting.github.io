@@ -104,6 +104,26 @@
     accent-color: #e94560;
     cursor: pointer;
   }
+
+  .slider-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 6px;
+  }
+  .slider-row label { font-size: 12px; color: #808090; flex-shrink: 0; }
+  .slider-row input[type="range"] {
+    flex: 1;
+    accent-color: #e94560;
+    cursor: pointer;
+  }
+  .slider-row .slider-val {
+    font-size: 12px;
+    color: #808090;
+    width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+  }
 </style>
 </head>
 <body>
@@ -165,6 +185,18 @@
   <h3 data-i18n="help">帮助</h3>
   <p class="hint" id="hintBox"></p>
 
+  <h3 data-i18n="bgImage">背景图</h3>
+  <div class="btn-row">
+    <button class="secondary" data-i18n="importBg" onclick="document.getElementById('bgFileInput').click()">导入背景图</button>
+    <button class="secondary" data-i18n="clearBg" onclick="clearBackground()">清除</button>
+  </div>
+  <input type="file" id="bgFileInput" accept="image/*" style="display:none" onchange="loadBackgroundImage(this)">
+  <div class="slider-row">
+    <label data-i18n="bgBrightness">背景亮度</label>
+    <input type="range" id="bgBrightness" min="0" max="100" value="50" oninput="setBgBrightness(this.value)">
+    <span class="slider-val" id="bgBrightnessVal">50%</span>
+  </div>
+
   <h3 data-i18n="pointList">锚点列表</h3>
   <div class="point-list" id="pointList"></div>
 </div>
@@ -183,6 +215,10 @@ const I18N = {
     drawCircle: '绘制圆形',
     radius: '半径',
     draw: '绘制',
+    bgImage: '背景图',
+    importBg: '导入背景图',
+    clearBg: '清除',
+    bgBrightness: '背景亮度',
     targetData: 'Target 数据',
     targetPlaceholder: '粘贴 Target 数据...',
     import: '导入',
@@ -215,6 +251,10 @@ const I18N = {
     drawCircle: 'Draw Circle',
     radius: 'R',
     draw: 'Draw',
+    bgImage: 'Background',
+    importBg: 'Import Image',
+    clearBg: 'Clear',
+    bgBrightness: 'Brightness',
     targetData: 'Target Data',
     targetPlaceholder: 'Paste Target data...',
     import: 'Import',
@@ -296,6 +336,8 @@ let showTarget = true;
 let selectedIdx = -1;
 let dragging = null;
 let targetData = [];
+let bgImage = null;
+let bgBrightness = 50;
 let viewX = 0, viewY = 0, zoom = 1;
 let zoomPercent = 100;
 let pathRotation = 0;
@@ -389,6 +431,34 @@ function toggleTarget() {
   render();
 }
 
+function loadBackgroundImage(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    if (bgImage && bgImage._url) URL.revokeObjectURL(bgImage._url);
+    img._url = url;
+    bgImage = img;
+    render();
+  };
+  img.onerror = () => URL.revokeObjectURL(url);
+  img.src = url;
+  input.value = '';
+}
+
+function clearBackground() {
+  if (bgImage && bgImage._url) URL.revokeObjectURL(bgImage._url);
+  bgImage = null;
+  render();
+}
+
+function setBgBrightness(val) {
+  bgBrightness = Math.max(0, Math.min(100, parseFloat(val) || 0));
+  document.getElementById('bgBrightnessVal').textContent = `${Math.round(bgBrightness)}%`;
+  render();
+}
+
 function parseTargetData(text) {
   const results = [];
   const lines = text.split('\n');
@@ -469,24 +539,17 @@ function exportTarget() {
     if (!match || tIdx >= positions.length) return line;
     const nums = match[1].trim().split(/\s+/);
     if (auraCompat){
-      nums[nums.length - 5] = positions[tIdx].x.toFixed(2);
-      nums[nums.length - 4] = positions[tIdx].y.toFixed(2);
-      if (nums.length > 2 && Number(nums[2]) === 0) nums[2] = '1';
-      if (nums.length > 1 && Number(nums[1]) === 0) {
-        nums[nums.length - 2] = '-2.00';
-        nums[nums.length - 1] = '500.00';
-      }
       nums.push('1200.00')
     }
-    else{
-      nums[nums.length - 6] = positions[tIdx].x.toFixed(2);
-      nums[nums.length - 5] = positions[tIdx].y.toFixed(2);
-      if (nums.length > 2 && Number(nums[2]) === 0) nums[2] = '1';
-      if (nums.length > 1 && Number(nums[1]) === 0) {
-        nums[nums.length - 3] = '-2.00';
-        nums[nums.length - 2] = '500.00';
-        nums[nums.length - 1] = '1200.00';
-      }
+
+    nums[nums.length - 6] = positions[tIdx].x.toFixed(2);
+    nums[nums.length - 5] = positions[tIdx].y.toFixed(2);
+    if (nums.length > 2 && Number(nums[2]) === 0) nums[2] = '1';
+    if (nums.length > 1 && Number(nums[1]) === 0) {
+      nums[nums.length - 3] = '-2.00';
+      nums[nums.length - 2] = '500.00';
+      nums[nums.length - 1] = '1200.00';
+
     }
     tIdx++;
     return `Target { ${nums.join(' ')} };`;
@@ -917,6 +980,7 @@ function render() {
   ctx.scale(zoom, zoom);
 
   drawFrame();
+  drawBackgroundImage();
   if (showGrid) drawGrid();
   drawPath();
   if (showTarget && targetData.length > 0) drawTargetPoints();
@@ -931,12 +995,32 @@ function drawFrame() {
   ctx.strokeStyle = 'rgba(255,255,255,0.3)';
   ctx.lineWidth = 2 / zoom;
   ctx.strokeRect(0, 0, FRAME_W, FRAME_H);
-  ctx.fillStyle = 'rgba(255,255,255,0.03)';
-  ctx.fillRect(0, 0, FRAME_W, FRAME_H);
+  if (!bgImage) {
+    ctx.fillStyle = 'rgba(255,255,255,0.03)';
+    ctx.fillRect(0, 0, FRAME_W, FRAME_H);
+  }
 
   ctx.fillStyle = 'rgba(255,255,255,0.4)';
   ctx.font = `${12 / zoom}px sans-serif`;
   ctx.fillText(`${FRAME_W}×${FRAME_H}`, 4 / zoom, -6 / zoom);
+}
+
+function drawBackgroundImage() {
+  if (!bgImage) return;
+  const imgW = bgImage.naturalWidth || bgImage.width;
+  const imgH = bgImage.naturalHeight || bgImage.height;
+  if (!imgW || !imgH) return;
+
+  const scale = Math.min(FRAME_W / imgW, FRAME_H / imgH);
+  const drawW = imgW * scale;
+  const drawH = imgH * scale;
+  const drawX = (FRAME_W - drawW) / 2;
+  const drawY = (FRAME_H - drawH) / 2;
+
+  ctx.save();
+  ctx.filter = `brightness(${bgBrightness}%)`;
+  ctx.drawImage(bgImage, drawX, drawY, drawW, drawH);
+  ctx.restore();
 }
 
 function drawGrid() {
