@@ -114,3 +114,31 @@ In the second image I made it a bit more complicated but it has the same system 
 ## 6. Sliders in Sequences
 It's important to have the sliders in your sequences face the direction to which it is heading.   
 ![](assets/ac_rule_027.png)
+
+## 7. Structure & Consistency
+Your chart shouldn't feel random, players should have some sense of "what's coming next". If a song is currently repeating itself, and you want to add a polished feel to your charts, then you should add some sense of consistency to it. A good way to go about this is to present an initial idea, then as the song progresses, present your idea again, making it ever so slightly different, do keep in mind the structure of a chart is often times linked with difficulty progression as the two concepts go hand in hand.
+![](assets/ac_rule_028.png)
+![](assets/ac_rule_029.png)
+![](assets/ac_rule_030.png)
+
+## 8. Difficulty Progression
+Difficulty Progression is the idea that as your chart progresses, the sequences get harder. You can see this in every diva chart. A really easy way to spot it is to look at the structure of a chart and paying attention to when a chart repeats an idea, often times it's harder than the first time that same idea showed up.   
+> [!IMPORTANT] 
+> Please do keep in mind this doesn't necessarily mean you need to make your beginning "super nerfed" nor does it mean you need to make the ending of an already-hard chart you have made harder, sometimes it's best to nerf the beginning of it, sometimes it's not, It all depends on what you decide as the charter.
+
+![](assets/ac_rule_031.png)
+![](assets/ac_rule_032.png)
+![](assets/ac_rule_033.png)
+
+## 9. Symmetry
+Symmetry is one of those things that isn't really a rule, but it does make your charts look way more polished if you know when to use it. SEGA does this all the time, especially whenever a song repeats a phrase with the same rhythm. 
+
+If you have a pattern going from left to right the first time around, try having it go from right to left the second time. Same goes for top and bottom placements. It's a simple way to make repeated sections feel intentional instead of looking like you just copy-pasted them. When mirroring a pattern, don't just move it to the other side of the screen and call it a day. Make sure everything else mirrors with it too. This means adjusting your Frequencies, Angles, Arcade Order, and anything else that would naturally flip with the pattern. If you don't, the pattern will end up looking "off" even if the placements themselves are mirrored.
+
+## 10. Note Types in Patterns
+This is a hard concept to put into text but, when planning out your sequences it's important to follow some sort of Symmetry. Your pattern does not need to be changing note types every new note, this mistake if often a clear indicator of a chart made by a Novice. Often times players will see this in high difficulty charts (often at high BPMs) where alternating between 2/3 notes almost every note is necessary to maintain a comfortable way to play the chart and think that every song requires such a quirk.
+
+That to say, Don't overcomplicate your patterns! Use note types in a logical way (based on pitch/words in a sentence etc.) You can even follow some sort of symmetry; just be consistent with them.
+![](assets/ac_rule_034.png)
+![](assets/ac_rule_035.png)
+![](assets/ac_rule_036.png)
