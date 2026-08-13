@@ -1,6 +1,6 @@
 > Author: lavverso   
 > Date: 2026-05-11  
-> Source: [Google Doc Link](https://docs.google.com/document/d/1xjQmM2EENKshNn-9o1U6KPMNADEkTrPyobqw1vRzvhQ/edit?tab=t.0#heading=h.sjrxwdhhqogt)
+> Source: [Google Doc Link](https://docs.google.com/document/d/1xjQmM2EENKshNn-9o1U6KPMNADEkTrPyobqw1vRzvhQ)
 
 ## Obtaining Your Files  
 Before doing anything, you’ll want to grab the video and/or audio files for the song that you want to chart and convert them into DIVA’s formats. This is helpful especially for the audio file to help make sure that your chart keeps the same sync from Comfy Studio to the in-game implementation.

@@ -1,6 +1,6 @@
 > Author: lavverso   
 > Date: 2026-05-11  
-> Source: [Google Doc Link](https://docs.google.com/document/d/1xjQmM2EENKshNn-9o1U6KPMNADEkTrPyobqw1vRzvhQ/edit?tab=t.0#heading=h.sjrxwdhhqogt)
+> Source: [Google Doc Link](https://docs.google.com/document/d/1xjQmM2EENKshNn-9o1U6KPMNADEkTrPyobqw1vRzvhQ)
 
 *Hatsune Miku: Project DIVA Mega Mix+*, in simple terms, is the fourth rerelease of a (at the time of this guide being written) 15 year old game, *Hatsune Miku: Project DIVA Arcade*. DIVA is **old**. Modding this game is held together by the community trying to work with whatever sticks and strings SEGA left us with. This includes **an ID system along with specific naming schemes that can cause literally anything in the game to conflict with each other, ranging from things sharing the same ID to things such as sprites sharing the same internal names**.
 

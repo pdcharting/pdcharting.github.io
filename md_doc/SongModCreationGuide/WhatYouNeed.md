@@ -1,6 +1,6 @@
 > Author: lavverso   
 > Date: 2026-05-11  
-> Source: [Google Doc Link](https://docs.google.com/document/d/1xjQmM2EENKshNn-9o1U6KPMNADEkTrPyobqw1vRzvhQ/edit?tab=t.0#heading=h.sjrxwdhhqogt)
+> Source: [Google Doc Link](https://docs.google.com/document/d/1xjQmM2EENKshNn-9o1U6KPMNADEkTrPyobqw1vRzvhQ)
 <!--- {docsify-ignore-all} --->
 
 - [DIVA Song Mod Creation Resources][resources_lav] created by Lavverso

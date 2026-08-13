@@ -1,6 +1,6 @@
 > Author: lavverso   
 > Date: 2026-05-11  
-> Source: [Google Doc Link](https://docs.google.com/document/d/1xjQmM2EENKshNn-9o1U6KPMNADEkTrPyobqw1vRzvhQ/edit?tab=t.0#heading=h.sjrxwdhhqogt)
+> Source: [Google Doc Link](https://docs.google.com/document/d/1xjQmM2EENKshNn-9o1U6KPMNADEkTrPyobqw1vRzvhQ)
 
 This guide is very long and drawn out. Modding any *Project DIVA* game is a long and tedious process and *Mega Mix+* is no different. **Take your time, thoroughly read what is written, and take things step-by-step if you need to.** The guide will provide important context as to what you’re doing and why you’re doing it. **If you’re unable to do that, modding Project DIVA probably isn’t for you.**
 
