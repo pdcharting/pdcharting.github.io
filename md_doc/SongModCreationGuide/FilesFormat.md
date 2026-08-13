@@ -30,8 +30,9 @@ If you are going to be utilizing a video file, you will want to download video f
 
 **If you download a file in <font color=green>.WEBM</font> format, it should always have a VP9 codec. So utilize that when you have the option!**
 
-> [!Tip]If your only codec download option is H264 (which is typical for older videos on sites like Nico Nico Douga), it may be less costly to convert your video to VP9 codec via FFmpeg before converting it into a .USM container.   
-If you’re editing videos, you can use plug-ins such as the AdobeWebM extension for Adobe Premiere Pro to add a .WEBM export option, which has VP9 codec by default.
+> [!Tip]
+> If your only codec download option is H264 (which is typical for older videos on sites like Nico Nico Douga), it may be less costly to convert your video to VP9 codec via FFmpeg before converting it into a .USM container.   
+> If you’re editing videos, you can use plug-ins such as the AdobeWebM extension for Adobe Premiere Pro to add a .WEBM export option, which has VP9 codec by default.
 
 
 Otherwise, formats do not matter as they will be converted later by the tools this guide will go over. Download whatever will give you the highest quality out of the options available. For example, <font color=green>.MP4</font> for video or <font color=green>.WAV/.OPUS/.M4A</font> for audio. **Based on my own experience, I would avoid <font color=green>.MP3</font> formats** as they can cut out any blank space at the beginning of the audio file and cause your video to become unsynced.

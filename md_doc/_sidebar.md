@@ -4,7 +4,7 @@
     - [Getting Started](SongModCreationGuide/GettingStarted.md)
         - [Regarding DIVA’s ID System and Mod ID Reservations](SongModCreationGuide/AboutIdSystem.md)
         - [Properly Formatting Your Files](SongModCreationGuide/FilesFormat.md)
-    - [Setting Up Your Mod Folder](SongModCreationGuide/ConfigModFolder.md)
+        - [Setting Up Your Mod Folder](SongModCreationGuide/ConfigModFolder.md)
 ----
 - Charting
     - [Charting Guide (General Rules)](ChartingRule/ac_rule.md 'Charting Guide (General Rules)')
