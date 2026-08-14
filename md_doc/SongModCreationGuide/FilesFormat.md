@@ -24,9 +24,7 @@ You have several options that are recommended by the community to grab your audi
 
 This guide will not be a tutorial for how to use these software. If you’re going to be modding the game, you should be able to utilize common sense to research and find out how to use them. Just note that if you’re downloading from YouTube, it will sometimes break the software due to YouTube’s constant fight against ad blockers. Therefore, you may have to use these interchangeably if updating them doesn’t fix it.
 
-
 If you are going to be utilizing a video file, you will want to download video files with **VP9 codec**. This is because Linux (ie. Steam Deck) doesn’t support H264 codec and can fail to load the video file, resulting in a black screen or sometimes crash. **It’s also important to note that converting H264 codec videos to VP9 codec can be time consuming depending on your hardware and inflate the video’s file size**. Therefore, it’s recommended that you download VP9 codec videos from the start when you can. (Sometimes videos are not available with VP9 codec, and that’s okay- but you should always choose VP9 when the option is available). **Never download your files in a resolution higher than 1920 x 1080.**
-
 
 **If you download a file in <font color=green>.WEBM</font> format, it should always have a VP9 codec. So utilize that when you have the option!**
 
@@ -91,7 +89,7 @@ The audio channels must be mapped to channels 1, 2, 3, and 4 respectively in ord
 **This process is completely optional**. Audio (such as the one in the below screenshot) will still load in Mega Mix+ properly even if the instrumental and vocal channels aren’t split from each other. It will simply not have the feature of vocals muting when you miss notes.  
 ![normal audio file example][normal_audio_file_example]
 
-### Normalizing Audio
+#### Normalizing Audio
 For this section, there is a video guide by AWaffleBird that goes over similar topics to this section. If you wish to do so, watch it [here][AWaffleBird_video].
 
 1. Mega Mix+, interestingly, decreases the perceived loudness of an audio file for use in-game. There’s an easy way to do this in Audacity by using the “Loudness Normalization…” effect. Simply <kbd>Ctrl</kbd>+<kbd>A</kbd> to select all of your audio tracks, and navigate to “Effect”, then “Volume and Compression”, then “Loudness Normalization…”   
@@ -102,7 +100,7 @@ For this section, there is a video guide by AWaffleBird that goes over similar t
 3. When you’re done, click “Apply”. The waveforms will be a lot smaller like the below image.  
 ![Loudness Normalization Done][loudness_normalization_done]
 
-### (Optional) Splitting Vocal and Instrumental Stems   
+#### (Optional) Splitting Vocal and Instrumental Stems   
 If you don’t want to go through the process of splitting your audio, skip to the [Exporting Audio header](#exporting-audio). **For the most accurate output, it’s recommended to normalize your audio with the original file before splitting stems.**
 
 There are different software that you can use to separate vocals. A common software that was recommended in the community over the years is [Ultimate Vocal Remover 5][UVR5_link], although you aren’t confined to this. **You should always check to see if the stems were separated accurately and didn’t cause any audio loss after converting.** It may be easier to look for split vocal and instrumental stems and resyncing your chart to that instead of fighting with algorithms for a proper output.
@@ -115,7 +113,7 @@ There are different software that you can use to separate vocals. A common softw
 ![split vocal done][split_vocal_done]
 > [!Tip] If you feel like you will have trouble keeping up with which track is which, feel free to rename them. It may be helpful when exporting.
 
-### Exporting Audio  
+#### Exporting Audio  
 When you are ready to export your audio, navigate to “File”, then “Export Audio…” 
 ![Export Audio Option][export_audio]  
 Select the option “Export to computer”.  
@@ -146,7 +144,7 @@ Remember to link up your channels like the following (the names are not relevant
 ![mixing mapping example][mixing_mapping_example]  
 Once that’s set-up, click “OK” and hit “Export” on the main “Export Audio” window!
 
-<!--- links --->
+<!-- links --->
 [ytdlp_link]:https://github.com/yt-dlp/yt-dlp
 [ytdlp_gui_link]:https://github.com/kannagi0303/yt-dlp-gui
 [cobalt_link]:https://cobalt.tools/
@@ -157,7 +155,7 @@ Once that’s set-up, click “OK” and hit “Export” on the main “Export 
 [AWaffleBird_video]:https://www.youtube.com/watch?v=Co3rr6CGGAo
 [UVR5_link]:https://github.com/Anjok07/ultimatevocalremovergui
 
-<!-- image --->
+ image --->
 [USM_Conversion_Example]:assets/image60.webp
 [wannacri_GUI_Example]:assets/image19.png
 [wannacriCS_Example]:assets/image6.png

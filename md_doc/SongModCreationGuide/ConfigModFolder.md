@@ -1,13 +1,3 @@
-<style>
-  .markdown-section pre[data-lang="treeview"]::after {
-    content: "Mod Folder Example";
-  }
-  .token.treeview-part .entry-name.ext-dsc:before { content: "\ea07"; } 
-  .token.treeview-part .entry-name.ext-farc:before { content: "\ea08"; }
-  .token.treeview-part .entry-name.ext-usm:before { content: "\ea05"; }
-  .token.treeview-part .entry-name.ext-toml:before { content: "\ea06"; }
-</style>
-
 > Author: lavverso   
 > Date: 2026-06-30  
 > Source: [Google Doc Link](https://docs.google.com/document/d/1xjQmM2EENKshNn-9o1U6KPMNADEkTrPyobqw1vRzvhQ)
@@ -47,3 +37,14 @@ Here are some important things to keep in mind:
 3. Any instance of files containing <font color=green>pv_####</font> can be repeated if you’re putting multiple songs in one mod.
 
 4. <font color=green>spr_sel_pvtmb_mod_name.farc</font> is a new naming scheme and thumbnail format that was introduced in DIVA Mod Loader v0.0.16 by vixen256. <font color=green>mod_name</font> should be replaced with your mod name, removing any special characters and replacing spaces with _ (eg. <font color=green>spr_sel_pvtmb_lavverso_song_pack.farc</font>). It’s **very important** that you pick a unique name for your mod and this file, as two files being named the same will lead to conflicts.
+
+<!-- treeview --> 
+<style>
+  .markdown-section pre[data-lang="treeview"]::after {
+    content: "Mod Folder Example";
+  }
+  .token.treeview-part .entry-name.ext-dsc:before { content: "\ea07"; } 
+  .token.treeview-part .entry-name.ext-farc:before { content: "\ea08"; }
+  .token.treeview-part .entry-name.ext-usm:before { content: "\ea05"; }
+  .token.treeview-part .entry-name.ext-toml:before { content: "\ea06"; }
+</style>

@@ -6,18 +6,18 @@
 - [DIVA Song Mod Creation Resources][resources_lav] created by Lavverso
     - Includes a **Template Song Mod** that this guide will be utilizing to help with creating sprites and databases.  
 - [Comfy Studio][comfy_samyuu] by Samyuu (Found in the [Project DIVA Modding 2nd Discord server][pdm2_discord])  
-    - …for creating and exporting *Project DIVA chart scripts*.  
+    - …for creating and exporting _Project DIVA chart scripts_.  
 - [DSC Studio][dsc_studio] by Nastys, based on Samyuu’s Script Editor  
-    - …for editing *Project DIVA chart scripts*.
+    - …for editing _Project DIVA chart scripts_.
 - [Miku Miku Model][mmm_skyth] by Skyth
-    - …for editing, importing, and exporting from formats *Project DIVA* utilizes (such as <font color=green>.FARC files</font>, and the game’s <font color=green>.CPK</font> files).
+    - …for editing, importing, and exporting from formats _Project DIVA_ utilizes (such as <font color=green>.FARC files</font>, and the game’s <font color=green>.CPK</font> files).
 - [Auto create mod_spr_db][spr_db_tool_hiki8man] by Hiki8man
     - …for generating sprite databases for your mod.
 - (Optional) [Database Converter][database_converter_skyth] by Skyth
     - …if you would like to convert and view sprite databases in <font color=green>.XML</font> format.
 - (Optional) [Megamix Sprite Helper][MMSH] by JitterGlitch and vixen256
     - …a highly recommended tool for aligning sprites and optimizing their files, if you don’t want to do it manually. Read the GitHub page for more information.
-- [Wannacri_GUI][usm_hiki8man] by Hiki8man, *or* [WannaCriCS][usm_RERASER] by RERASER
+- [Wannacri_GUI][usm_hiki8man] by Hiki8man, _or_ [WannaCriCS][usm_RERASER] by RERASER
     - …for converting and packing movie files into a <font color=green>.USM</font> container used by the game.
 - An audio editing tool such as [Audacity][audacity_link]
     - …for converting audio files into a properly formatted <font color=green>.OGG</font> file.

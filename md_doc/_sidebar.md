@@ -2,10 +2,11 @@
     - [What You Need](SongModCreationGuide/WhatYouNeed.md) 
     - [Introduction](SongModCreationGuide/Introduction.md)
     - [Getting Started](SongModCreationGuide/GettingStarted.md)
-        - [Regarding DIVA’s ID System and Mod ID Reservations](SongModCreationGuide/AboutIdSystem.md)
-        - [Properly Formatting Your Files](SongModCreationGuide/FilesFormat.md)
-        - [Setting Up Your Mod Folder](SongModCreationGuide/ConfigModFolder.md)
-        - [Setting Up Your Chart Script (.DSC)](SongModCreationGuide/ConfigDSC.md)
+    - [Regarding DIVA’s ID System and Mod ID Reservations](SongModCreationGuide/AboutIdSystem.md)
+    - [Properly Formatting Your Files](SongModCreationGuide/FilesFormat.md)
+    - [Setting Up Your Mod Folder](SongModCreationGuide/ConfigModFolder.md)
+    - [Setting Up Your Chart Script (.DSC)](SongModCreationGuide/ConfigDSC.md)
+    - [Setting Up Your mod_pv_db.txt](SongModCreationGuide/ConfigPvdb.md)
 ----
 - Charting
     - [Charting Guide (General Rules)](ChartingRule/ac_rule.md 'Charting Guide (General Rules)')

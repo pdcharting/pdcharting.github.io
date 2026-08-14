@@ -2,9 +2,9 @@
 > Date: 2026-05-11  
 > Source: [Google Doc Link](https://docs.google.com/document/d/1xjQmM2EENKshNn-9o1U6KPMNADEkTrPyobqw1vRzvhQ)
 
-*Hatsune Miku: Project DIVA Mega Mix+* uses script files for its charts and PVs. These script files contain information such as notes, when challenge times start and end, when to toggle the appearance of certain characters, when to play movie files, and when to change stages (among many others). These scripts are down as <font color=green>`.DSC`</font> files, which is one of the many binary formats that DIVA uses.
+_Hatsune Miku: Project DIVA Mega Mix+_ uses script files for its charts and PVs. These script files contain information such as notes, when challenge times start and end, when to toggle the appearance of certain characters, when to play movie files, and when to change stages (among many others). These scripts are down as <font color=green>`.DSC`</font> files, which is one of the many binary formats that DIVA uses.
 
-## Exporting Your Comfy Studio Chart
+## Exporting Your Comfy Studio Chart :id=export_dsc
 Before exporting your chart, you should take your **converted audio** file from the previous step and load it into Comfy Studio. This is to make sure your movie file and chart are still synced with the audio. At this point, you should have already made your chart and be aware of how to adjust timing offsets properly.
 
 When saving charts in Comfy Studio, it will save it as a <font color=green>`.CSFM`</font> format file. DIVA obviously won’t use this, so you’ll need to export it to a <font color=green>`.DSC`</font> file. The Comfy Studio manual goes over this, so you should know how to do it if you read it earlier when the guide mentioned it. But, just in case…
@@ -12,7 +12,7 @@ When saving charts in Comfy Studio, it will save it as a <font color=green>`.CSF
 1. In Comfy Studio, go to the ‘**File**’ tab, then ‘**Export**’, then ‘**Export PV Script Chart…**’.
 ![Export PV Script Chart][export_dsc_menu]  
     - ‘**Export UPDC Chart…**’ is PPD related and will not be covered in this guide.
-    - ‘**Export PV Script MData…**’ only works for *Hatsune Miku: Project DIVA Arcade Future Tone* and requires you to have a dump of the game to even utilize it.
+    - ‘**Export PV Script MData…**’ only works for _Hatsune Miku: Project DIVA Arcade Future Tone_ and requires you to have a dump of the game to even utilize it.
 
 2. Name the file with the following naming schemes depending on your difficulty, replacing <font color=green>####</font> with your reserved PV ID from earlier:
     |||
@@ -23,7 +23,7 @@ When saving charts in Comfy Studio, it will save it as a <font color=green>`.CSF
     |pv_####_<font color=MediumSeaGreen>normal</font>.dsc|…for <font color=MediumSeaGreen>NORMAL</font> difficulty charts.|
     |pv_####_<font color=DarkTurquoise>easy</font>.dsc|…for <font color=DarkTurquoise>EASY</font> difficulty charts.|
 
-## Checking Your Output
+## Checking Your Output :id=check_output
 You can easily check the output of your chart by using Nastys’s [DSC Studio][dsc_studio]. Each DIVA scripts needs, at minimum, the following to play correctly:
 
 1. <font color=green>TIME(0);</font>
@@ -48,13 +48,13 @@ You can easily check the output of your chart by using Nastys’s [DSC Studio][d
 ![Edit DSC File][edit_dsc]   
 Exporting your chart with Comfy Studio will take care of all of this for you, but keep this in mind for when you are manually editing the script.
 
-## (Optional) Manual Additions
+## (Optional) Manual Additions :id=manual_additions
 These are optional features that Samyuu’s main branch of Comfy Studio does not support, which you can add using [DSC Studio][dsc_studio]. There may be forks of the software that support these features, but for the simplicity of the guide and for documentation purposes I won’t be discussing those forks. You can find more documentation on DSC commands [here][dma_dsc_doc].
 
 > [!TIP]
 > For all of my manual additions, I like to set things up in an extra <font color=green>`.DSC`</font> file that can easily be merged with whatever chart I’m working with. This is handy for when you’re working with multiple difficulties. You can easily merge two <font color=green>`.DSC`</font> files into one using the ‘**Merge (experimental)...**’ option under the ‘**File**’ tab in DSC Studio, which will automatically sort out commands with the option to remove unnecessary <font color=green>`TIME();`</font> commands and move <font color=green>`PV_END();`</font> and <font color=green>`END();`</font> to the end of the script.
 
-### Converting TIME(); Unit Values   
+### Converting TIME(); Unit Values :id=time_unit  
 
 ----
 
@@ -69,14 +69,14 @@ You can easily convert time values to DIVA’s <font color=green>`TIME();`</font
 Your final <font color=green>`TIME();`</font> command would be <font color=green>`TIME(19350000);`</font>.   
 Nastys’s [DSC Studio][dsc_studio] will also display <font color=green>`TIME();`</font> command values in HH:MM:SS.ssss format in real time while editing.
 
-### Refining Your Sync
+### Refining Your Sync :id=refine_sync
 
 ----
 
 Sometimes, your chart sync may be off depending on your movie and song offsets. You can experiment with your offset by using the ‘**Advanced TIME shift…**’ option in DSC Studio.
 ![Advanced TIME shift...][time_shift]
 
-### Adding CHALLENGE TIME
+### Adding CHALLENGE TIME :id=challenge_time
 
 ----
 
@@ -99,7 +99,7 @@ If you would like your Challenge Time to end at 3:13.5000:
 
 Please note that for Arcade charts, Challenge Times only appear in EASY and NORMAL difficulty charts. If you would like them to appear in HARD, EXTREME, or EXTRA EXTREME difficulty charts, you will need to use an extra plug-in such as vixen256’s [Challenge Time][ct_mod] mod. **This will bloat your scores as Challenge Time will give you additional points, and is not just an aesthetic change like Technical Zones.**
 
-### Adding TECHNICAL ZONES   
+### Adding TECHNICAL ZONES :id=technical_zones  
 
 ----
 
@@ -122,11 +122,11 @@ If you would like your Technical Zone to end at 2:26.0000:
 `MODE_SELECT(31,9);`
 </font>
 
-### Adding Chance Time Notes (or Rainbow Notes)
+### Adding Chance Time Notes (or Rainbow Notes) :id=chance_time
 
 ----
 
-In Arcade charts, Chance Time was reimplemented as a singular note that, when hit, plays a special “SUCCESS” effect and changes the PV to a special success event. These are only ever seen in PVs from *Hatsune Miku: Project DIVA F* and *Hatsune Miku: Project DIVA F 2nd*, as those are the only two games that support success events. However, it’s possible to add these to any song whether or not you have a success event.
+In Arcade charts, Chance Time was reimplemented as a singular note that, when hit, plays a special “SUCCESS” effect and changes the PV to a special success event. These are only ever seen in PVs from _Hatsune Miku: Project DIVA F_ and _Hatsune Miku: Project DIVA F 2nd_, as those are the only two games that support success events. However, it’s possible to add these to any song whether or not you have a success event.
 
 While I could list every target ID that you would need to change in order to have its rainbow counterpart, it’s much easier to do the following:
 
@@ -152,7 +152,7 @@ You will also need to add <font color=green>pv_####.pvbranch_success_se_name=pvc
 
 <!-- Image -->
 [export_dsc_menu]:assets/image15.png
-[edit_dsc]:assets/image16.png
+[edit_dsc]:assets/image23.png
 [time_shift]:assets/image4.png
 [past_comfy_note_test]:assets/image30.png
 [set_chance_true]:assets/image32.png
