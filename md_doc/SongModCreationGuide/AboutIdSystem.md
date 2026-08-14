@@ -6,4 +6,5 @@
 
 Because of this ID system, you will want to pick a specific ID and stick to it for the entirety of the modding process. This is because you will be naming your files and sprites using this ID as a key identifier. **You will want to choose this ID and reserve it as soon as possible.** At the time of this guide being written, the best way to reserve your ID is to use the [PV Spreadsheet function on DIVA Mod Archive][dma_pvlist]. You should have access to information about what IDs on-site and off-site mods use there so you can pick an ID. When you’re ready to reserve your ID, just log into the site using your Discord account and click the “Reserve IDs” button. **This should be done as soon as possible to avoid conflicts.**
 
+<!-- Links -->
 [dma_pvlist]:https://divamodarchive.com/pv_spreadsheet

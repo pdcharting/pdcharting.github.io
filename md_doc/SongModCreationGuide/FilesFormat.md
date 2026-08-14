@@ -54,11 +54,14 @@ I will cover this in two steps: converting your video, and converting your audio
 For converting your video file, you have two options:
 - [Wannacri_GUI][usm_hiki8man] by Hiki8man
 - [WannaCriCS][usm_RERASER] by RERASER
-    - NOTE: Some people have had various issues with this software, such as files not converting fully and/or the YouTube download function not working. While it’s recommended that you download the video manually and use the former option, you can still use this converter in “local” mode.
+> [!NOTE] 
+> Some people have had various issues with WannaCriCS, such as files not converting fully and/or the YouTube download function not working. While it’s recommended that you download the video manually and use the former option, you can still use this converter in “local” mode.
 
-An important note about these two softwares is that they are both unfortunately named similarly to the infamous WannaCry ransomware attack, which will more likely than not cause it to be flagged as a virus. **Both files are safe, and I would recommend looking into making an exclusion for them in your antivirus software.** If you are ever concerned about whether or not a file is malicious, I recommend scanning it through VirusTotal to obtain a detailed report. The reports for both software can be found here:
-- [Wannacri_GUI VirusTotal Report][usm_hiki8man_report]
-- [WannaCriCS VirusTotal Report][usm_RERASER_report]
+> [!IMPORTANT]
+> An important note about these two softwares is that they are both unfortunately named similarly to the infamous WannaCry ransomware attack, which will more likely than not cause it to be flagged as a virus. **Both files are safe, and I would recommend looking into making an exclusion for them in your antivirus software.**   
+> If you are ever concerned about whether or not a file is malicious, I recommend scanning it through VirusTotal to obtain a detailed report. The reports for both software can be found here:
+> - [Wannacri_GUI VirusTotal Report][usm_hiki8man_report]
+> - [WannaCriCS VirusTotal Report][usm_RERASER_report]
 
 Wannacri_GUI has the option of either using a user interface to select your files and convert them with various options, or using a pre-made <font color=green>.BAT</font> file to convert it to a <font color=green>.USM</font> file. Dragging and dropping your video onto the <font color=green>.BAT</font> file is all you’ll need for this portion, as it will convert your video with the proper VP9 encoding needed for Linux compatibility.  
 ![USM_Conversion_Example][USM_Conversion_Example]
@@ -142,7 +145,8 @@ Remember to link up your channels like the following (the names are not relevant
 
 ![mixing mapping example][mixing_mapping_example]  
 Once that’s set-up, click “OK” and hit “Export” on the main “Export Audio” window!
-<!--- link --->
+
+<!--- links --->
 [ytdlp_link]:https://github.com/yt-dlp/yt-dlp
 [ytdlp_gui_link]:https://github.com/kannagi0303/yt-dlp-gui
 [cobalt_link]:https://cobalt.tools/
@@ -152,7 +156,8 @@ Once that’s set-up, click “OK” and hit “Export” on the main “Export 
 [usm_RERASER_report]:https://www.virustotal.com/gui/file/25f6333de3789ee7de0e587ef7fc1095b6c8f99adc3fe56fe6bd7b40a9093776/detection
 [AWaffleBird_video]:https://www.youtube.com/watch?v=Co3rr6CGGAo
 [UVR5_link]:https://github.com/Anjok07/ultimatevocalremovergui
-<!--- image --->
+
+<!-- image --->
 [USM_Conversion_Example]:assets/image60.webp
 [wannacri_GUI_Example]:assets/image19.png
 [wannacriCS_Example]:assets/image6.png

@@ -26,6 +26,8 @@
     - Optionally, ensure your photo editor supports <font color=green>.DDS</font> formats.
 - (Optional, Recommended) [Notepad++][notepad++_link]
 
+
+<!-- Links -->
 [resources_lav]:https://drive.google.com/file/d/19yAugtWW_Zi6gRoDaD2aJMzfTGQMm4AC
 [comfy_samyuu]:https://discord.com/channels/531630856767406105/531640485459132416/921740942061486130
 [pdm2_discord]:https://discord.gg/cvBVGDZ

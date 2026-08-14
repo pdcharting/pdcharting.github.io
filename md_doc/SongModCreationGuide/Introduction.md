@@ -12,5 +12,5 @@ This guide will help you make a mod with an Arcade chart, accompanied by a 2D PV
 ## What You Won’t Learn
 This guide is <ins>not</ins> a tutorial for how to create charts. It is a guide on how to set them up as a mod in *Hatsune Miku: Project DIVA Mega Mix+*.
 
-
+<!-- Links -->
 [pdmm_discord]:https://discord.gg/Cc7MreBPj7
