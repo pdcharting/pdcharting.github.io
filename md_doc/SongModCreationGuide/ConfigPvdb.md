@@ -356,7 +356,7 @@ The quirk to this is that whatever the costume ID is, **the module table expects
 
 All official 2D PV songs in the game use the default modules, so you’re free to just leave any <font color=green>`pv_costume`</font> fields set to <font color=green>`1`</font>. Otherwise, you can look up which costume pertains to which module using [DIVA Mod Archive][DMA].
 
-#### Number of Performers
+#### Number of Performers :id=performer_num
 ----
 ```
 pv_####.performer.num
@@ -379,7 +379,7 @@ These designate the number of performers in your song. Remember that the perform
 
 Having any more than 6 performers is not allowed by the game. Sorry to those who wanted Teto to be with all the Cryptonloids.
 
-#### (Optional) Initializing Performer’s Motions 
+#### (Optional) Initializing Performer’s Motions :id=motion
 ----
 ```
 pv_####.motion
@@ -401,7 +401,7 @@ pv_####.motion5P.01=CMN_POSE_DEFAULT_T
 pv_####.motion6P.01=CMN_POSE_DEFAULT_T
 ```
 
-#### (Optional) Chance Time Success Audio
+### (Optional) Chance Time Success Audio :id=success_se
 ----
 ```
 pv_####.pvbranch_success_se_name
@@ -411,7 +411,7 @@ pv_####.pvbranch_success_se_name
 pv_####.pvbranch_success_se_name=pvchange04
 ```
 
-#### Song Select Audio Preview 
+### Song Select Audio Preview :id=sabi
 ----
 ```
 pv_####.sabi
@@ -429,31 +429,35 @@ Do note that Comfy Studio lists the time stamps in MM.SS.ssss, meanwhile the <fo
 
 Decimal places are not an issue. SEGA typically tends to round them to the nearest tenth decimal value, if you are curious. Also make sure that you don’t get the values confused, as they’re listed backwards in <font color=green>`pv_db`</font> compared to how they are in Comfy Studio.
 
-#### Song File Name
+### Song File Name :id=song_file_name
 ----
 ```
 pv_####.song_file_name
 ```
 This points to the location of your song file. If you have been following the guide so far and are using the template mod, you can just replace all instances of <font color=green>`pv_####`</font> with your PV ID. For example, <font color=green>`pv_####.song_file_name=rom/sound/song/pv_####.ogg`</font> would turn into something like <font color=green>`pv_6918.song_file_name=rom/sound/song/pv_6918.ogg`</font>.
 
-#### Default Sound Effects
+### Default Sound Effects :id=se_effect_name
 ----
 ```
 pv_####.se_name
 pv_####.slide_name
 pv_####.slidertouch_name
-pv_####.chainslide_first_name, etc.
+pv_####.chainslide_first_name
+etc.
 ```
 Each song has a default sound effect for each type (Button, Slide, Chain Slide, and Slider Control) that is defined in the <font color=green>`pv_db`</font>. These options are what is used for the **Song Defaults** option in the **Button FX Config** in-game.
 
 See the below tables to see which names you should set for each attribute. If needed, you can match the Japanese Names for each sound effect type to the names displayed in Comfy Studio. Using anything outside of this list might cause issues unless your mod includes the custom sound effects.
 
 
-<details open>
+<details>
   <summary><strong>Button Sound Effects</strong></summary>
 
+```
+pv_####.se_name
+```
 > [!NOTE]
-> This information was taken from gm_btn_se_id.bin from rom_ps4 of diva_main.cpk.
+> This information was taken from **gm_btn_se_id.bin** from rom_ps4 of **diva_main.cpk**.
 
 |Japanese Name|English Name|se_name|
 |---|---|---|
@@ -483,15 +487,163 @@ See the below tables to see which names you should set for each attribute. If ne
 |クラップ|Clap|29_clap|
 
 </details>
+<details>
+  <summary><strong>Slide Sound Effects</strong></summary>
+
+```
+pv_####.slide_name
+```
+> [!NOTE]
+> This information was taken from **gm_slide_se_id.bin** from rom of **diva_main.cpk**.
+
+|Japanese Name|English Name|slide_name|
+|---|---|---|
+|スライドＡ|Slide A|slide_se13|
+|スライドＢ|Slide B|slide_se01|
+|スライドＣ|Slide C|slide_se05|
+|スライドＤ|Slide D|slide_se07|
+|スライドＥ|Slide E|slide_se11|
+|スライドＦ|Slide F|slide_se25|
+|スライドＧ|Slide G|slide_se26|
+
+</details>
+<details>
+  <summary><strong>Slider Touch Sound Effects</strong></summary>
+
+```
+pv_####.slidertouch_name
+```
+> [!NOTE]
+> This information was taken from **gm_chainslide_se_id.bin** from rom of **diva_main.cpk**.
+
+|Japanese Name|English Name|slidertouch_name|
+|---|---|---|
+|ウィンドチャイム|Wind Chimes|slide_windchime|
+|レーザー|Laser|slide_laser|
+
+</details>
+<details>
+  <summary><strong>Chainslide Sound Effects</strong></summary>
+
+```
+pv_####.chainslide_failure_name
+pv_####.chainslide_first_name
+pv_####.chainslide_sub_name
+pv_####.chainslide_success_name
+```
+> [!NOTE]
+> This information was taken from **gm_chainslide_se_id.bin** from rom of **diva_main.cpk**.
+
+|Japanese Name|English Name|chainslide_failure_name|chainslide_first_name|chainslide_sub_name|chainslide_success_name|
+|---|---|---|---|---|---|
+|チェーンスライドＡ|Chain Slide A|slide_ng03|slide_long02a|slide_button08|slide_ok03|
+|チェーンスライドＢ|Chain Slide B|slide_ng03|slide_long01a|slide_button08|slide_ok02|
+|チェーンスライドＣ|Chain Slide C|slide_ng03|slide_long06a|slide_button08|slide_ok04|
+|チェーンスライドＤ|Chain Slide D|slide_ng03|slide_long08a|slide_button08|slide_ok01|
+|チェーンスライドＥ|Chain Slide E|slide_ng03|slide_long01b|slide_button08|slide_ok08|
+|チェーンスライドＦ|Chain Slide F|slide_ng03|slide_long02b|slide_button08|slide_ok02|
+|チェーンスライドＧ|Chain Slide G|slide_ng03|slide_long02c|slide_button08|slide_ok08|
+|チェーンスライドＨ|Chain Slide H|slide_ng03|slide_long06b|slide_button08|slide_ok03|
+|チェーンスライドＩ|Chain Slide I|slide_ng03|slide_long08b|slide_button08|slide_ok04|
+|チェーンスライドＪ|Chain Slide J|slide_ng03|slide_long12a|slide_button08|slide_ok08|
+|チェーンスライドＫ|Chain Slide K|slide_ng03|slide_long12b|slide_button08|slide_ok09|
+|チェーンスライドＬ|Chain Slide L|slide_ng03|slide_long13a|slide_button08|slide_ok09|
+|チェーンスライドＭ|Chain Slide M|slide_ng03|slide_long14a|slide_button08|slide_ok09|
+|チェーンスライドＮ|Chain Slide N|slide_ng03|slide_long15a|slide_button08|slide_ok02|
+|チェーンスライドＯ|Chain Slide O|slide_ng03|slide_long15b|slide_button08|slide_ok06|
+|チェーンスライドＰ|Chain Slide P|slide_ng03|slide_long16a|slide_button08|slide_ok07|
+|チェーンスライドＱ|Chain Slide Q|slide_ng03|slide_long17a|slide_button08|slide_ok08|
+|チェーンスライドＲ|Chain Slide R|slide_ng03|slide_long19a|slide_button08|slide_ok09|
+</details>
+
+### Song Name :id=song_name
+----
+```
+pv_####.song_name
+pv_####.song_name_en
+```
+This should be self-explanatory. <font color=green>`song_name`</font> is the song’s name in Japanese, and <font color=green>`song_name_en`</font> is the song’s name in English. It’s okay to have English in both if there is no official Japanese title (see _Hello, Worker_).
+
+### Japanese Song Name Reading :id=song_name_reading
+----
+```
+pv_####.song_name_reading
+```
+This is **essential** as the entirety of the Japanese locale’s alphabetical sort is done in Hiragana. Even if the song name is in English, you should still convert it to Hiragana. For example, with Hello, Worker, the hiragana was <font color=green>はろーわーかー</font>, or <font color=green>Harōwākā</font>. Don’t use direct translations as the words may end up completely different.
+
+A website that seemed to give an accurate output was [NihongoDera][nihongodera]. Testing it with the Japanese name of _This is the Happiness and Peace of Mind Committee_ (_こちら、幸福安心委員会です。_) gave me hiragana that almost exactly matched the song_name_reading in-game. However, converters will not always be accurate. I, the writer of this guide, do not know a bit of Japanese.
+
+You can see that NihongoDera’s output was こちら、こうふくあんしんいいんかいです。, while the song_name_reading in the vanilla pv_db was こちらこうふくあんしんいいんかいです.
+![][kana_example]
+![][kana_reasult]
+![][kana_pvdb]
+Note that when posting it into mod_pv_db, you should **delete any whitespace (spaces) and punctuation**. All of the text should be concatenated together in one string.
+
+This is a very odd, work-around way of getting the Hiragana names, but hopefully this can help people who have no one to ask. Please also do your research and double check the hiragana output with multiple sources.
+
+### English Song Name Reading :id=song_name_reading_en
+----
+```
+pv_####.song_name_reading_en
+```
+Compared to Japanese Song Name Reading, this field is completely optional. In the vanilla game, it was used as follows:
+- 1. In _*Hello, Planet_, the <font color=green>`song_name_reading_en`</font> was set to <font color=green>Hello Planet</font> to keep it from being sorted in the “1-9” alphabetical sort due to the <font color=green>*</font>.
+![][song_name_en]
+- 2. In songs that begin with a numeral (_39_, _1/6 -out of the gravity-_, _2D Dream Fever_, _1925_) had a <font color=green>\{</font> appended to the front. (They forgot to do this for 39 Music!, but it doesn’t seem to affect the sort)
+
+Please use this as needed at your own discretion. You can search through the base game’s databases for examples on how SEGA used it if you are curious.
+
+### Song Credits :id=songinfo
+----
+```
+pv_####.songinfo
+pv_####.songinfo_en
+```
+Just like with the <font color=green>`song_name`</font>, <font color=green>`songinfo`</font> is for Japanese credit information and <font color=green>`songinfo_en`</font> is for English credit information. You can choose from the following credits, but anything defined for one language should also be defined for the other:
+```
+pv_####.songinfo.arranger=
+pv_####.songinfo.guitar_player=
+pv_####.songinfo.illustrator=
+pv_####.songinfo.lyrics=
+pv_####.songinfo.manipulator=
+pv_####.songinfo.music=
+pv_####.songinfo.pv_editor=
+
+pv_####.songinfo_en.arranger=
+pv_####.songinfo_en.guitar_player=
+pv_####.songinfo_en.illustrator=
+pv_####.songinfo_en.lyrics=
+pv_####.songinfo_en.manipulator=
+pv_####.songinfo_en.music=
+pv_####.songinfo_en.pv_editor=
+```
+**While these are optional, a credit for <font color=green>lyrics</font> and <font color=green>music</font> should be defined at minimum.**
+> [!TIP]
+> These can also be used as a guide to know what you should be crediting for in your logo sprite. While <font color=green>illustrator</font> is a field used by the vanilla game, they do not actually appear in-game as credits. But, I recommend defining it if any plug-in might allow for it in the future.
+
+### Song Lyrics :id=lyric
+----
+```
+pv_####.lyric
+pv_####.lyric_en
+```
+AWaffleBird wrote a great guide on setting up lyrics for your song mods. You can check out the guide on [GameBanana][banana_lyric] or [Google Docs][google_lyric]. **This is not to be confused with <font color=green>pv_###.songinfo.lyrics</font> or <font color=green>pv_###.songinfo_en.lyrics</font>**.
 
 <!-- Links -->
 [DML_github]:https://github.com/blueskythlikesclouds/DivaModLoader
 [DMA]:https://divamodarchive.com/modules
+[nihongodera]:hhttps://nihongodera.com/tools/kana-converter
+[banana_lyric]:https://gamebanana.com/tuts/16391
+[google_lyric]:https://docs.google.com/document/d/1SqrNjDY8S86TtBRkFBiW7BQP92y1pR4kanoK1Q81e4s
 
 <!-- Image -->
 [pv_db_image]:assets/image8.png
 [replace_hash]:assets/image36.png
 [preview_time]:assets/image21.png
+[kana_example]:assets/image31.png
+[kana_reasult]:assets/image13.png
+[kana_pvdb]:assets/image43.png
+[song_name_en]:assets/image22.png
 
 <!-- Markdown -->
-[export_dsc]:/SongModCreationGuide/ConfigDSC.md ':target=exporting-your-comfy-studio-chart'
+[export_dsc]:/SongModCreationGuide/ConfigDSC.md 
