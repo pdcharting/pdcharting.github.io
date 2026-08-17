@@ -346,10 +346,143 @@ The quirk to this is that whatever the costume ID is, **the module table expects
 All official 2D PV songs in the game use the default modules, so you’re free to just leave any <font color=green>`pv_costume`</font> fields set to <font color=green>`1`</font>. Otherwise, you can look up which costume pertains to which module using [DIVA Mod Archive][DMA].
 
 #### Performer Type :id=performer_type
+----
 ```
 pv_####.performer.#.type
 ```
 These are simple classifications that show a character’s role in a PV. If a character **sings** in a PV, then their type should be <font color=green>`VOCAL`</font>. If a character **only appears** in a PV but still plays an important role, then their type should be <font color=green>`GUEST`</font>.
+
+The quirk to this is that whatever the costume ID is, **the module table expects you to add 1 to whatever the value was**. Since <font color=green>`pv_costume`</font> takes the costume ID **as it’s listed in the module table**, you will need to add +1 to whatever ID you’re using. So, even though all the default modules have a COS ID of 0, they’ll be listed in the module table and your <font color=green>`pv_costume`</font> field as <font color=green>`1`</font>.
+
+All official 2D PV songs in the game use the default modules, so you’re free to just leave any <font color=green>`pv_costume`</font> fields set to <font color=green>`1`</font>. Otherwise, you can look up which costume pertains to which module using [DIVA Mod Archive][DMA].
+
+#### Number of Performers
+----
+```
+pv_####.performer.num
+```
+These designate the number of performers in your song. Remember that the performer indexes start at 0 instead of 1 when counting.
+
+- 1. If you have a performer with index <font color=green>`0`</font>…
+        - You will set <font color=green>`pv_####.performer.num=1`</font>
+- 2. If you have performers with indexes <font color=green>`0`</font> and <font color=green>`1`</font>…
+        - You will set <font color=green>`pv_####.performer.num=2`</font>.
+- 3. If you have performers with indexes <font color=green>`0`</font>, <font color=green>`1`</font>, and <font color=green>`2`</font>…
+        - You will set <font color=green>`pv_####.performer.num=3`</font>
+- 4. If you have performers with indexes <font color=green>`0`</font>, <font color=green>`1`</font>, <font color=green>`2`</font>, and <font color=green>`3`</font>…
+        - You will set <font color=green>`pv_####.performer.num=4`</font>
+- 5. If you have performers with indexes <font color=green>`0`</font>, <font color=green>`1`</font>, <font color=green>`2`</font>, <font color=green>`3`</font>, and <font color=green>`4`</font>…
+        - You will set <font color=green>`pv_####.performer.num=5`</font>
+        - At the time of writing this guide, having 5 performers is allowed by the game but may cause some visual issues.
+- 6. If you have performers with indexes <font color=green>`0`</font>, <font color=green>`1`</font>, <font color=green>`2`</font>, <font color=green>`3`</font>, <font color=green>`4`</font>, and <font color=green>`5`</font>…
+        - You will set <font color=green>`pv_####.performer.num=6`</font>
+
+Having any more than 6 performers is not allowed by the game. Sorry to those who wanted Teto to be with all the Cryptonloids.
+
+#### (Optional) Initializing Performer’s Motions 
+----
+```
+pv_####.motion
+```
+
+Technically, you should also initialize all of your performers to use the basic t-pose motion. However, SEGA is really inconsistent with this for the following reasons:
+
+- 1. Earlier 2DPVs (such as _Leia_, _Francisca_, and _slump_) define the default motion as the old <font color=green>`CMN_MRA00_13_01`</font> motion from Arcade. This has never changed.
+- 2. 2DPVs introduced at the end of Arcade Future Tone’s lifespan (Hibikase and Suna no Wakusei feat. Hatsune Miku) do not have any motions defined whatsoever.
+- 3. SEGA made a mistake with BRING IT ON and instead of defining the t-pose motion for both performers, they just defined two instances of it.
+
+For those reasons, **you do not need to worry about the <font color=green>pv_####.motion</font> field in your <font color=green>mod_pv_db</font> as long as you’re making a 2D PV mod**. However, they will be listed here:
+```
+pv_####.motion.01=CMN_POSE_DEFAULT_T
+pv_####.motion2P.01=CMN_POSE_DEFAULT_T
+pv_####.motion3P.01=CMN_POSE_DEFAULT_T
+pv_####.motion4P.01=CMN_POSE_DEFAULT_T
+pv_####.motion5P.01=CMN_POSE_DEFAULT_T
+pv_####.motion6P.01=CMN_POSE_DEFAULT_T
+```
+
+#### (Optional) Chance Time Success Audio
+----
+```
+pv_####.pvbranch_success_se_name
+```
+**If** you added a Chance Time Note (Rainbow Note) to your chart earlier in the guide, you **will** need to add this line to your <font color=green>`mod_pv_db.txt`</font>. Paste this line in after the <font color=green>`pv_####.performer.num=`</font> line, replacing <font color=green>####</font> with your PV ID:
+```
+pv_####.pvbranch_success_se_name=pvchange04
+```
+
+#### Song Select Audio Preview 
+----
+```
+pv_####.sabi
+```
+You can set this up in Comfy Studio using the Song Preview settings, or by doing it manually:
+![Song Preview settings][preview_time]
+
+<font color=green>`pv_####.sabi.play_time=`</font> is the duration of the preview. <font color=green>`pv_####.sabi.start_time=`</font> is when the preview starts. For my example, the fields would be…
+```
+pv_####.sabi.play_time=29.610
+pv_####.sabi.start_time=35.115
+```
+
+Do note that Comfy Studio lists the time stamps in MM.SS.ssss, meanwhile the <font color=green>`mod_pv_db.txt`</font> will only take SS.ssss. So if your time stamp is <font color=green>`01:30.000`</font>, you will need to change that to seconds (so add the 60 seconds to the 30 seconds, ie. <font color=green>`pv_####.sabi.start_time=90.000`</font>)
+
+Decimal places are not an issue. SEGA typically tends to round them to the nearest tenth decimal value, if you are curious. Also make sure that you don’t get the values confused, as they’re listed backwards in <font color=green>`pv_db`</font> compared to how they are in Comfy Studio.
+
+#### Song File Name
+----
+```
+pv_####.song_file_name
+```
+This points to the location of your song file. If you have been following the guide so far and are using the template mod, you can just replace all instances of <font color=green>`pv_####`</font> with your PV ID. For example, <font color=green>`pv_####.song_file_name=rom/sound/song/pv_####.ogg`</font> would turn into something like <font color=green>`pv_6918.song_file_name=rom/sound/song/pv_6918.ogg`</font>.
+
+#### Default Sound Effects
+----
+```
+pv_####.se_name
+pv_####.slide_name
+pv_####.slidertouch_name
+pv_####.chainslide_first_name, etc.
+```
+Each song has a default sound effect for each type (Button, Slide, Chain Slide, and Slider Control) that is defined in the <font color=green>`pv_db`</font>. These options are what is used for the **Song Defaults** option in the **Button FX Config** in-game.
+
+See the below tables to see which names you should set for each attribute. If needed, you can match the Japanese Names for each sound effect type to the names displayed in Comfy Studio. Using anything outside of this list might cause issues unless your mod includes the custom sound effects.
+
+
+<details open>
+  <summary><strong>Button Sound Effects</strong></summary>
+
+> [!NOTE]
+> This information was taken from gm_btn_se_id.bin from rom_ps4 of diva_main.cpk.
+
+|Japanese Name|English Name|se_name|
+|---|---|---|
+|ボタン音Ａ|Button FX A|01_button1|
+|ボタン音Ｂ|Button FX B|02_button2|
+|ボタン音Ｃ|Button FX C|03_button3|
+|ボタン音Ｄ|Button FX D|05_button5|
+|ボタン音Ｅ|Button FX E|06_button6|
+|ボタン音Ｆ|Button FX F|41_button9|
+|ボタン音Ｇ|Button FX G|42_button10|
+|ボタン音Ｈ|Button FX H|43_button11|
+|ボタン音Ｉ|Button FX I|44_button12|
+|ハイハットＡ|Hi-hat A|08_hh1|
+|ハイハットＡ(2nd)|Hi-hat A (2nd)|08_hh1_2nd|
+|ハイハットＢ|Hi-hat B|10_hh3|
+|ハイハットＢ(2nd)|Hi-hat B (2nd)|10_hh3_2nd|
+|大太鼓|Taiko Drum|20_wataiko|
+|大太鼓(2nd)|Taiko Drum (2nd)|20_wataiko_2nd|
+|ウッドブロックＡ|Woodblock A|21_wood1|
+|ウッドブロックＡ(2nd)|Woodblock A (2nd)|21_wood1_2nd|
+|ウッドブロックＢ|Woodblock B|22_wood2|
+|ウッドブロックＢ(2nd)|Woodblock B (2nd)|22_wood2_2nd|
+|スティック|Stick|23_stick|
+|タンバリン|Tambourine|24_tambourine|
+|タンバリン(2nd)|Tambourine (2nd)|24_tambourine_2nd|
+|鈴|Bell|28_bell3|
+|クラップ|Clap|29_clap|
+
+</details>
 
 <!-- Links -->
 [DML_github]:https://github.com/blueskythlikesclouds/DivaModLoader
@@ -358,6 +491,7 @@ These are simple classifications that show a character’s role in a PV. If a ch
 <!-- Image -->
 [pv_db_image]:assets/image8.png
 [replace_hash]:assets/image36.png
+[preview_time]:assets/image21.png
 
 <!-- Markdown -->
 [export_dsc]:/SongModCreationGuide/ConfigDSC.md ':target=exporting-your-comfy-studio-chart'
