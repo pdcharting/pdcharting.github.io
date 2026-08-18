@@ -599,6 +599,7 @@ Please use this as needed at your own discretion. You can search through the bas
 pv_####.songinfo
 pv_####.songinfo_en
 ```
+![song_info]
 Just like with the <font color=green>`song_name`</font>, <font color=green>`songinfo`</font> is for Japanese credit information and <font color=green>`songinfo_en`</font> is for English credit information. You can choose from the following credits, but anything defined for one language should also be defined for the other:
 ```
 pv_####.songinfo.arranger=
@@ -644,6 +645,7 @@ AWaffleBird wrote a great guide on setting up lyrics for your song mods. You can
 [kana_reasult]:assets/image13.png
 [kana_pvdb]:assets/image43.png
 [song_name_en]:assets/image22.png
+[song_info]:assets/image26.png
 
 <!-- Markdown -->
 [export_dsc]:/SongModCreationGuide/ConfigDSC.md 
